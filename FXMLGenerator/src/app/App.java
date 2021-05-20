@@ -10,6 +10,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 /**
@@ -17,14 +18,21 @@ import javafx.stage.Stage;
  * @author RoulinY01
  */
 public class App extends Application {
-    
+
+    private static final String IMAGES_FOLDER = "app/img/";
+
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
-        
+        Parent root = FXMLLoader.load(getClass().getResource("MainView.fxml"));
+
         Scene scene = new Scene(root);
-        
+
+        Image img = new Image(IMAGES_FOLDER + "icon.png");
+
         stage.setScene(scene);
+        //IMPORTANT !!!!
+        stage.setResizable(false);
+        stage.getIcons().add(img);
         stage.show();
     }
 
@@ -34,5 +42,5 @@ public class App extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
+
 }

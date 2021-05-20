@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="353.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.MainCtrl">
+   <center>
+      <TableView prefHeight="313.0" prefWidth="386.0" BorderPane.alignment="CENTER">
+         <columns>
+            <TableColumn editable="false" prefWidth="91.0" resizable="false" text="Beans" />
+            <TableColumn editable="false" prefWidth="89.0" resizable="false" text="FormView" />
+            <TableColumn editable="false" prefWidth="85.0" resizable="false" text="ListView" />
+         </columns>
+         <BorderPane.margin>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </BorderPane.margin>
+      </TableView>
+   </center>
+   <left>
+      <VBox alignment="TOP_CENTER" prefHeight="353.0" prefWidth="232.0" BorderPane.alignment="CENTER">
+         <children>
+            <ImageView fx:id="imgLogo" fitHeight="84.0" fitWidth="254.0" pickOnBounds="true" preserveRatio="true">
+               <VBox.margin>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </VBox.margin>
+            </ImageView>
+            <Button fx:id="btnExplorer" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#openExplorer" text="Select Java application directory">
+               <VBox.margin>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </VBox.margin>
+            </Button>
+         </children>
+      </VBox>
+   </left>
+</BorderPane>

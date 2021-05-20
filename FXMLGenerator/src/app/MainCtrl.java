@@ -5,32 +5,36 @@ package app;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
+import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 /**
  *
  * @author RoulinY01
  */
-public class FXMLDocumentController implements Initializable {
-    
+public class MainCtrl implements Initializable {
+
+    private static final String IMAGES_FOLDER = "app/img/";
+
     @FXML
-    private Label label;
-    
+    private ImageView imgLogo;
     @FXML
-    private void handleButtonAction(ActionEvent event) {
-        System.out.println("You clicked me!");
-        label.setText("Hello World!");
-    }
-    
+    private Button btnExplorer;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }    
-    
+        Image img = new Image(IMAGES_FOLDER + "logo.png");
+        imgLogo.setImage(img);
+    }
+
+    @FXML
+    private void openExplorer(ActionEvent event) {
+    }
+
 }
