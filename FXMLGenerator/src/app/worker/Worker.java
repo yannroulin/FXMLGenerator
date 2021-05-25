@@ -6,7 +6,6 @@ package app.worker;
  * @author pa
  */
 public class Worker implements WorkerItf {
-
-    
+  
 
 }
