@@ -75,7 +75,7 @@ public class MainCtrl implements Initializable {
         chooser.setTitle("Select your java application folder");
         chooser.setInitialDirectory(new File("."));
         File externApplicationDirectory = chooser.showDialog(lblProjectName.getScene().getWindow());
-        
+
         //Si l'utilisateur ferme l'explorateur
         if (externApplicationDirectory == null) {
             return;
@@ -85,23 +85,24 @@ public class MainCtrl implements Initializable {
 
         try {
             beansInFolder = wrk.createSelection(beansDirectory);
+
+            tableChoose.setItems(FXCollections.observableList(beansInFolder));
+            ArrayList<String> modelsList = searchModels();
+            modelsColumn.setCellFactory(ComboBoxTableCell.forTableColumn(FXCollections.observableArrayList(modelsList)));
+            modelsColumn.setEditable(true);
+
+            btnExplorer.setVisible(false);
+            btnGenerateViews.setVisible(true);
+            lblProjectName.setVisible(true);
+            lblProjectName.setText(externApplicationDirectory.getName());
         } catch (MyFileException ex) {
             JfxPopup.displayError("Erreur", "Pas de Beans dans le répertoire courant !", ex.getMessage());
         }
-
-        tableChoose.setItems(FXCollections.observableList(beansInFolder));
-        ArrayList<String> modelsList = searchModels();
-        modelsColumn.setCellFactory(ComboBoxTableCell.forTableColumn(FXCollections.observableArrayList(modelsList)));
-        modelsColumn.setEditable(true);
-
-        btnExplorer.setVisible(false);
-        btnGenerateViews.setVisible(true);
-        lblProjectName.setVisible(true);
-        lblProjectName.setText(externApplicationDirectory.getName());
     }
 
     @FXML
     private void generateViews(ActionEvent event) {
+
     }
 
     private ArrayList<String> searchModels() {

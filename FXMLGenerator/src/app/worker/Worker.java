@@ -20,13 +20,16 @@ public class Worker implements WorkerItf {
     public ArrayList<String> searchBeans(File beansDirectory) throws MyFileException {
         ArrayList<String> filesNames = new ArrayList<>();
         ArrayList<Selection> beansList = new ArrayList<>();
-        
+
         try {
             File[] flist = beansDirectory.listFiles();
+            if (flist.length == 0) {
+                throw new MyFileException("Worker.searchBeans\n" + "Le répertoire que vous avez séléctionné ne contient pas de beans !", false);
+            }
             for (File file : flist) {
                 filesNames.add(file.getName());
             }
-        } catch (Exception ex) {
+        } catch (MyFileException ex) {
             throw new MyFileException("Worker.searchBeans\n" + "Le répertoire que vous avez séléctionné ne contient pas de beans !", false);
         }
         return filesNames;
