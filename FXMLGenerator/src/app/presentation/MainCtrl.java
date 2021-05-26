@@ -6,6 +6,7 @@
 package app.presentation;
 
 import app.beans.Selection;
+import app.exceptions.MyFileException;
 import app.helpers.JfxPopup;
 import app.worker.Worker;
 import app.worker.WorkerItf;
@@ -13,6 +14,8 @@ import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,6 +28,7 @@ import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.DirectoryChooser;
 
 /**
@@ -71,14 +75,29 @@ public class MainCtrl implements Initializable {
         chooser.setTitle("Select your java application folder");
         chooser.setInitialDirectory(new File("."));
         File externApplicationDirectory = chooser.showDialog(lblProjectName.getScene().getWindow());
+        
+        //Si l'utilisateur ferme l'explorateur
+        if (externApplicationDirectory == null) {
+            return;
+        }
         File beansDirectory = new File(externApplicationDirectory.getAbsolutePath() + DEFAULT_BEANS_PATH);
+        ArrayList<Selection> beansInFolder = null;
 
-        ArrayList<Selection> beansInFolder = wrk.createSelection(beansDirectory);
+        try {
+            beansInFolder = wrk.createSelection(beansDirectory);
+        } catch (MyFileException ex) {
+            JfxPopup.displayError("Erreur", "Pas de Beans dans le répertoire courant !", ex.getMessage());
+        }
 
         tableChoose.setItems(FXCollections.observableList(beansInFolder));
         ArrayList<String> modelsList = searchModels();
         modelsColumn.setCellFactory(ComboBoxTableCell.forTableColumn(FXCollections.observableArrayList(modelsList)));
         modelsColumn.setEditable(true);
+
+        btnExplorer.setVisible(false);
+        btnGenerateViews.setVisible(true);
+        lblProjectName.setVisible(true);
+        lblProjectName.setText(externApplicationDirectory.getName());
     }
 
     @FXML
@@ -86,11 +105,11 @@ public class MainCtrl implements Initializable {
     }
 
     private ArrayList<String> searchModels() {
-
         return wrk.searchModels();
     }
 
-    private ArrayList<String> searchBeans(File beansDirectory) {
+    private ArrayList<String> searchBeans(File beansDirectory) throws MyFileException {
         return wrk.searchBeans(beansDirectory);
     }
+
 }

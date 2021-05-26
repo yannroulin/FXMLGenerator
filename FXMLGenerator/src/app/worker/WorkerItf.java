@@ -1,6 +1,7 @@
 package app.worker;
 
 import app.beans.Selection;
+import app.exceptions.MyFileException;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -11,8 +12,10 @@ import java.util.ArrayList;
  */
 public interface WorkerItf {
 
-    ArrayList<String> searchBeans(File beansDirectory);
+    ArrayList<String> searchBeans(File beansDirectory) throws MyFileException;
+
     ArrayList<String> searchModels();
-    ArrayList<Selection> createSelection(File beansDirectory);
+
+    ArrayList<Selection> createSelection(File beansDirectory) throws MyFileException;
 
 }

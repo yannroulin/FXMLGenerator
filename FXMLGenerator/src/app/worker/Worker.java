@@ -1,9 +1,11 @@
 package app.worker;
 
 import app.beans.Selection;
-import app.helpers.JfxPopup;
+import app.exceptions.MyFileException;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Implémentation de la couche "métier" de l'application.
@@ -15,15 +17,17 @@ public class Worker implements WorkerItf {
     public static final String DEFAULT_MODELS_PATH = "\\src\\app\\models";
 
     @Override
-    public ArrayList<String> searchBeans(File beansDirectory) {
+    public ArrayList<String> searchBeans(File beansDirectory) throws MyFileException {
         ArrayList<String> filesNames = new ArrayList<>();
+        ArrayList<Selection> beansList = new ArrayList<>();
+        
         try {
             File[] flist = beansDirectory.listFiles();
             for (File file : flist) {
                 filesNames.add(file.getName());
             }
         } catch (Exception ex) {
-            //
+            throw new MyFileException("Worker.searchBeans\n" + "Le répertoire que vous avez séléctionné ne contient pas de beans !", false);
         }
         return filesNames;
     }
@@ -41,14 +45,19 @@ public class Worker implements WorkerItf {
     }
 
     @Override
-    public ArrayList<Selection> createSelection(File beansDirectory) {
+    public ArrayList<Selection> createSelection(File beansDirectory) throws MyFileException {
 
         ArrayList<Selection> beansList = new ArrayList<>();
-        ArrayList<String> beanName = searchBeans(beansDirectory);
+        ArrayList<String> beanName;
 
-        for (String bean : beanName) {
-            Selection s = new Selection(bean);
-            beansList.add(s);
+        try {
+            beanName = searchBeans(beansDirectory);
+            for (String bean : beanName) {
+                Selection s = new Selection(bean);
+                beansList.add(s);
+            }
+        } catch (MyFileException ex) {
+            throw new MyFileException("Worker.createSelection\n" + "Le répertoire que vous avez séléctionné ne contient pas de beans !", false);
         }
         return beansList;
     }
