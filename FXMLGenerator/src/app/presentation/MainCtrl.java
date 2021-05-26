@@ -36,7 +36,6 @@ public class MainCtrl implements Initializable {
 
     private static final String IMAGES_FOLDER = "app/img/";
     public static final String DEFAULT_BEANS_PATH = "\\src\\app\\beans";
-    public static final String DEFAULT_MODELS_PATH = "\\src\\app\\models";
 
     private WorkerItf wrk;
     @FXML
@@ -74,15 +73,9 @@ public class MainCtrl implements Initializable {
         File externApplicationDirectory = chooser.showDialog(lblProjectName.getScene().getWindow());
         File beansDirectory = new File(externApplicationDirectory.getAbsolutePath() + DEFAULT_BEANS_PATH);
 
-        ArrayList<Selection> beansList = new ArrayList<>();
-        ArrayList<String> beanName = searchBeans(beansDirectory);
+        ArrayList<Selection> beansInFolder = wrk.createSelection(beansDirectory);
 
-        for (String bean : beanName) {
-            Selection s = new Selection(bean);
-            beansList.add(s);
-        }
-
-        tableChoose.setItems(FXCollections.observableList(beansList));
+        tableChoose.setItems(FXCollections.observableList(beansInFolder));
         ArrayList<String> modelsList = searchModels();
         modelsColumn.setCellFactory(ComboBoxTableCell.forTableColumn(FXCollections.observableArrayList(modelsList)));
         modelsColumn.setEditable(true);
@@ -93,27 +86,11 @@ public class MainCtrl implements Initializable {
     }
 
     private ArrayList<String> searchModels() {
-        File modelsDirectory = new File("." + DEFAULT_MODELS_PATH);
-        File[] tableModels = modelsDirectory.listFiles();
-        ArrayList<String> models = new ArrayList<>();
 
-        for (File model : tableModels) {
-            models.add(model.getName());
-        }
-        return models;
+        return wrk.searchModels();
     }
 
     private ArrayList<String> searchBeans(File beansDirectory) {
-        ArrayList<String> filesNames = new ArrayList<>();
-        try {
-            File[] flist = beansDirectory.listFiles();
-            for (File file : flist) {
-                filesNames.add(file.getName());
-            }
-        } catch (Exception ex) {
-            JfxPopup.displayError("Erreur", "Pas de Beans dans le répertoire courant !", ex.getMessage());
-        }
-        return filesNames;
+        return wrk.searchBeans(beansDirectory);
     }
-
 }
