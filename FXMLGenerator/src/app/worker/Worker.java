@@ -3,8 +3,6 @@ package app.worker;
 import app.beans.Selection;
 import app.exceptions.MyFileException;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -18,10 +16,8 @@ import javafx.collections.ObservableList;
  */
 public class Worker implements WorkerItf {
 
-    public static final String DEFAULT_FXML_PATH = "\\src\\app\\viewsmodels\\";
-    public static final String DEFAULT_CTRL_PATH = "\\src\\app\\ctrlmodels\\";
-    public static final String PATH_TO_MODEL = ".\\src\\app\\viewsmodels\\FormView.fxml";
-    public static final String PATH_TO_CTRL = ".\\src\\app\\ctrlmodels\\CtrlFormModel.java";
+    public static final String PATH_TO_MODEL = ".\\src\\app\\modelsviews\\FormView.fxml";
+    public static final String PATH_TO_CTRL = ".\\src\\app\\modelsctrl\\CtrlFormModel.java";
     private WorkerFile wrk;
 
     public Worker() {

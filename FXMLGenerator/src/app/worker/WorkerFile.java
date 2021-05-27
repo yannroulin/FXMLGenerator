@@ -6,7 +6,6 @@
 package app.worker;
 
 import app.exceptions.MyFileException;
-import static app.worker.Worker.DEFAULT_FXML_PATH;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -21,6 +20,8 @@ import java.util.List;
  * @author RoulinY01
  */
 public class WorkerFile {
+
+    public static final String DEFAULT_FXML_PATH = "\\src\\app\\modelsviews\\";
 
     public List<String> readFiles(String path) throws MyFileException {
         byte[] bytesTab;
