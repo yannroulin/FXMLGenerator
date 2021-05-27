@@ -160,7 +160,7 @@ public class Worker implements WorkerItf {
         try {
             Files.write(path, bytes);
         } catch (IOException ex) {
-            throw new MyFileException("Worker.readFxml\n" + "Erreur dans la génération de votre vue !", false);
+            throw new MyFileException("Worker.writeFxml\n" + "Erreur dans la génération de votre vue !", false);
         }
     }
 
@@ -196,7 +196,7 @@ public class Worker implements WorkerItf {
         try {
             Files.write(path, bytes);
         } catch (IOException ex) {
-            throw new MyFileException("Worker.readFxml\n" + "Erreur dans la génération du contrôleur de votre vue !", false);
+            throw new MyFileException("Worker.writeCtrl\n" + "Erreur dans la génération du contrôleur de votre vue !", false);
         }
 
     }
@@ -230,10 +230,8 @@ public class Worker implements WorkerItf {
         try {
             bytesTab = Files.readAllBytes(finalPath);
             lines = Files.readAllLines(finalPath, Charset.forName("UTF-8"));
-            System.out.println(lines);
-
         } catch (IOException ex) {
-            throw new MyFileException("Worker.readFxml\n" + "Lecture de fichier impossible", false);
+            throw new MyFileException("Worker.readCtrl\n" + "Lecture de fichier impossible", false);
         }
         return lines;
     }

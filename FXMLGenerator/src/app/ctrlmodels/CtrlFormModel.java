@@ -5,11 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
-/**
- * FXML Controller class
- *
- * @author RoulinY01
- */
+
 public class CtrlFormModel implements Initializable {
 
     //insert here
