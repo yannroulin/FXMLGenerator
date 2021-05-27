@@ -5,7 +5,9 @@ package app;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
+import app.helpers.JfxPopup;
+import app.presentation.MainCtrl;
+import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -20,20 +22,54 @@ import javafx.stage.Stage;
 public class App extends Application {
 
     private static final String IMAGES_FOLDER = "app/img/";
+    private static final String TITLE = "FXML Generator";
+    private static final String LOGO = "app/img/icon.png";
+    private static final String FXML = "/app/presentation/MainView.fxml";
+    private static final String ERROR_TITLE = "Erreur";
+    private static final String ERROR_MSG = "App.start:\nProblème avec le fichier";
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("presentation/MainView.fxml"));
 
-        Scene scene = new Scene(root);
+        // charger la vue principale
+        FXMLLoader loader = null;
+        Parent mainView = null;
+        try {
+            loader = new FXMLLoader(getClass().getResource(FXML));
+            mainView = loader.load();
+        } catch (java.lang.IllegalStateException | IOException ex) {
+            String errMsg = ERROR_MSG + " " + FXML + ".\n\n" + ex.getMessage();
+            JfxPopup.displayError(ERROR_TITLE, null, errMsg);
+            System.exit(-1);
+        }
 
-        Image img = new Image(IMAGES_FOLDER + "icon.png");
+        // récupérer une référence sur son contrôleur
+        MainCtrl mainCtrl = loader.getController();
 
-        stage.setScene(scene);
-        //IMPORTANT !!!!
-        stage.setResizable(false);
-        stage.getIcons().add(img);
+        // préparer la première scène
+        Scene scene1 = new Scene(mainView);
+
+        // modifier l'estrade pour la première scène
+        stage.setScene(scene1);
+
+        // choisir un titre pour la fenêtre principale (pour la pièce de théâtre)
+        stage.setTitle(TITLE);
+
+        // rajouter une icône dans la barre de titre de la vue principale
+        stage.getIcons().add(new Image(LOGO));
+
+        // afficher cette première vue (tirer le rideau)
         stage.show();
+
+        // ajout d'un écouteur pour contrôler la sortie de l'application.
+        stage.setOnCloseRequest(e -> {
+
+            // pour éviter que la fenêtre principale ne se ferme dans tous les cas
+            e.consume();
+
+            // lors d'une demande de sortie, laisser le travail à faire au contrôleur
+            mainCtrl.quitter();
+        });
     }
 
     /**

@@ -14,10 +14,10 @@ import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -120,5 +120,14 @@ public class MainCtrl implements Initializable {
 
     private ArrayList<File> searchBeans(File beansDirectory) throws MyFileException {
         return wrk.searchBeans(beansDirectory);
+    }
+
+    public void quitter() {
+        // faire qq chose avant de quitter
+        // wrk.fermerBD();
+        // System.out.println("Je vous quitte !");
+
+        // obligatoire pour bien terminer une application JavaFX
+        Platform.exit();
     }
 }
