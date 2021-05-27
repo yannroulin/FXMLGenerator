@@ -4,7 +4,6 @@ import app.beans.Selection;
 import app.exceptions.MyFileException;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -21,35 +20,12 @@ public class Worker implements WorkerItf {
 
     public static final String DEFAULT_FXML_PATH = "\\src\\app\\viewsmodels\\";
     public static final String DEFAULT_CTRL_PATH = "\\src\\app\\ctrlmodels\\";
+    public static final String PATH_TO_MODEL = ".\\src\\app\\viewsmodels\\FormView.fxml";
+    public static final String PATH_TO_CTRL = ".\\src\\app\\ctrlmodels\\CtrlFormModel.java";
+    private WorkerFile wrk;
 
-    @Override
-    public ArrayList<File> searchBeans(File beansDirectory) throws MyFileException {
-        ArrayList<File> beansList = new ArrayList<>();
-
-        try {
-            File[] flist = beansDirectory.listFiles();
-            if (flist.length == 0) {
-                throw new MyFileException("Worker.searchBeans\n" + "Le répertoire que vous avez séléctionné ne contient pas de beans !", false);
-            }
-            for (File file : flist) {
-                beansList.add(file);
-            }
-        } catch (MyFileException ex) {
-            throw new MyFileException("Worker.searchBeans\n" + "Le répertoire que vous avez séléctionné ne contient pas de beans !", false);
-        }
-        return beansList;
-    }
-
-    @Override
-    public ArrayList<String> searchModels() {
-        File modelsDirectory = new File("." + DEFAULT_FXML_PATH);
-        File[] tableModels = modelsDirectory.listFiles();
-        ArrayList<String> models = new ArrayList<>();
-
-        for (File model : tableModels) {
-            models.add(model.getName());
-        }
-        return models;
+    public Worker() {
+        wrk = new WorkerFile();
     }
 
     @Override
@@ -59,7 +35,7 @@ public class Worker implements WorkerItf {
         ArrayList<File> beanName;
 
         try {
-            beanName = searchBeans(beansDirectory);
+            beanName = wrk.searchBeans(beansDirectory);
             for (File bean : beanName) {
                 Selection s = new Selection(bean.getName(), bean.getPath());
                 beansList.add(s);
@@ -71,49 +47,38 @@ public class Worker implements WorkerItf {
     }
 
     @Override
-    public void readBeans(ObservableList<Selection> selected) throws MyFileException {
+    public void getAttributesofBeans(ObservableList<Selection> selected) throws MyFileException {
 
         String filePath;
 
         for (Selection beanInfo : selected) {
-            if (beanInfo.getPath() == null) {
-                throw new MyFileException("Worker.lireFichiers\n" + "Chemin de fichier null", false);
-            }
-            filePath = beanInfo.getPath();
 
-            Path file = Paths.get(filePath);
+            filePath = beanInfo.getPath();
             byte[] tab;
 
-            try {
-                ArrayList<String> attributes = new ArrayList<>();
-                tab = Files.readAllBytes(file);
-                List<String> lines = Files.readAllLines(file, Charset.forName("UTF-8"));
+            ArrayList<String> attributes = new ArrayList<>();
+            List<String> lines = wrk.readFiles(filePath);
 
-                for (String line : lines) {
-                    if (line.contains("private")) {
-                        attributes.add(line);
-                    }
+            for (String line : lines) {
+                if (line.contains("private")) {
+                    attributes.add(line);
                 }
-                writeFxml(attributes, beanInfo);
-                writeCtrl(attributes, beanInfo);
-            } catch (IOException e) {
-                throw new MyFileException("Worker.readBeans\n" + "Lecture de fichier impossible", false);
             }
-
+            prepareFxml(attributes, beanInfo, PATH_TO_MODEL);
+            prepareCtrl(attributes, beanInfo, PATH_TO_CTRL);
         }
-
     }
 
     @Override
-    public void writeFxml(ArrayList<String> list, Selection bean) throws MyFileException {
+    public void prepareFxml(ArrayList<String> list, Selection bean, String pathToModel) throws MyFileException {
         String xmlFileForm = "";
         String xmlFileList = "";
         String[] tab;
         int rowIndex = -1;
         int columnIndex = -1;
-
         byte[] bytes = null;
-        List<String> linesOfFxmlFile = readFxml();
+
+        List<String> linesOfFxmlFile = wrk.readFiles(pathToModel);
 
         for (String attributes : list) {
             rowIndex++;
@@ -138,7 +103,6 @@ public class Worker implements WorkerItf {
                 // code block
                 }
         }
-
         String destinationFolder = bean.getPath().replace(bean.getBean(), "");
         destinationFolder += "..\\models\\";
         String link = bean.getBean().replace(".java", "Ctrl");
@@ -156,19 +120,14 @@ public class Worker implements WorkerItf {
             }
             bytes = content.getBytes();
         }
-
-        try {
-            Files.write(path, bytes);
-        } catch (IOException ex) {
-            throw new MyFileException("Worker.writeFxml\n" + "Erreur dans la génération de votre vue !", false);
-        }
+        wrk.writeFile(path, bytes);
     }
 
     @Override
-    public void writeCtrl(ArrayList<String> list, Selection bean) throws MyFileException {
+    public void prepareCtrl(ArrayList<String> list, Selection bean, String pathToCtrl) throws MyFileException {
         String[] tab;
         byte[] bytes = null;
-        List<String> linesOfCtrlFile = readCtrl();
+        List<String> linesOfCtrlFile = wrk.readFiles(pathToCtrl);
         String linesToAdd = "";
 
         for (String attributes : list) {
@@ -192,48 +151,17 @@ public class Worker implements WorkerItf {
             }
             bytes = content.getBytes();
         }
-
-        try {
-            Files.write(path, bytes);
-        } catch (IOException ex) {
-            throw new MyFileException("Worker.writeCtrl\n" + "Erreur dans la génération du contrôleur de votre vue !", false);
-        }
-
+        wrk.writeFile(path, bytes);
     }
 
     @Override
-    public List<String> readFxml() throws MyFileException {
-        byte[] bytesTab;
-        List<String> lines;
-        Path finalPath;
-
-        finalPath = Paths.get("." + DEFAULT_FXML_PATH + "FormView.fxml");
-
-        try {
-            bytesTab = Files.readAllBytes(finalPath);
-            lines = Files.readAllLines(finalPath, Charset.forName("UTF-8"));
-
-        } catch (IOException ex) {
-            throw new MyFileException("Worker.readFxml\n" + "Lecture de fichier impossible", false);
-        }
-        return lines;
+    public ArrayList<File> searchBeans(File beansDirectory) throws MyFileException {
+        return wrk.searchBeans(beansDirectory);
     }
 
     @Override
-    public List<String> readCtrl() throws MyFileException {
-        byte[] bytesTab;
-        List<String> lines;
-        Path finalPath;
-
-        finalPath = Paths.get("." + DEFAULT_CTRL_PATH + "CtrlFormModel.java");
-
-        try {
-            bytesTab = Files.readAllBytes(finalPath);
-            lines = Files.readAllLines(finalPath, Charset.forName("UTF-8"));
-        } catch (IOException ex) {
-            throw new MyFileException("Worker.readCtrl\n" + "Lecture de fichier impossible", false);
-        }
-        return lines;
+    public ArrayList<String> searchModels() {
+        return wrk.searchModels();
     }
 
 }

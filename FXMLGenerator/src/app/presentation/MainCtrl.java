@@ -108,7 +108,7 @@ public class MainCtrl implements Initializable {
     private void generateViews(ActionEvent event) {
         ObservableList<Selection> selected = tableChoose.getSelectionModel().getSelectedItems();
         try {
-            wrk.readBeans(selected);
+            wrk.getAttributesofBeans(selected);
         } catch (MyFileException ex) {
             JfxPopup.displayError("Erreur", "Chemin de fichier null, veuillez créer un répertoire 'app.models' !", ex.getMessage());
         }
