@@ -13,8 +13,8 @@
    <center>
       <TableView fx:id="tableChoose" editable="true" prefHeight="313.0" prefWidth="386.0" BorderPane.alignment="CENTER">
          <columns>
-            <TableColumn fx:id="beansColumn" editable="false" prefWidth="136.0" resizable="false" text="Beans" />
-            <TableColumn fx:id="modelsColumn" editable="false" prefWidth="129.0" resizable="false" text="Models" />
+            <TableColumn fx:id="beansColumn" editable="false" prefWidth="134.0" resizable="false" text="Beans" />
+            <TableColumn fx:id="modelsColumn" editable="false" prefWidth="131.0" resizable="false" text="Models" />
          </columns>
          <BorderPane.margin>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
@@ -22,7 +22,7 @@
       </TableView>
    </center>
    <left>
-      <VBox alignment="TOP_CENTER" prefHeight="353.0" prefWidth="232.0" BorderPane.alignment="CENTER">
+      <VBox alignment="TOP_CENTER" prefHeight="353.0" prefWidth="276.0" BorderPane.alignment="CENTER">
          <children>
             <ImageView fx:id="imgLogo" fitHeight="84.0" fitWidth="254.0" pickOnBounds="true" preserveRatio="true">
                <VBox.margin>

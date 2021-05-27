@@ -5,23 +5,26 @@
  */
 package app.beans;
 
-import java.util.ArrayList;
-
 /**
  *
  * @author RoulinY01
  */
 public class Selection {
 
-    private String bean;
+    private final String bean;
+    private final String path;
 
-    public Selection(String bean) {
+    public Selection(String bean, String path) {
         this.bean = bean;
+        this.path = path;
     }
 
     public String getBean() {
         return bean;
     }
 
+    public String getPath() {
+        return path;
+    }
 
 }

@@ -13,22 +13,31 @@ import app.worker.WorkerItf;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import javafx.beans.binding.ObjectBinding;
+import javafx.beans.binding.StringBinding;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TablePosition;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.DirectoryChooser;
 
 /**
@@ -40,6 +49,7 @@ public class MainCtrl implements Initializable {
 
     private static final String IMAGES_FOLDER = "app/img/";
     public static final String DEFAULT_BEANS_PATH = "\\src\\app\\beans";
+    public static final int MAX_MODEL_NUMBER = 10;
 
     private WorkerItf wrk;
     @FXML
@@ -86,6 +96,9 @@ public class MainCtrl implements Initializable {
         try {
             beansInFolder = wrk.createSelection(beansDirectory);
 
+            tableChoose.getSelectionModel().setSelectionMode(
+                    SelectionMode.MULTIPLE
+            );
             tableChoose.setItems(FXCollections.observableList(beansInFolder));
             ArrayList<String> modelsList = searchModels();
             modelsColumn.setCellFactory(ComboBoxTableCell.forTableColumn(FXCollections.observableArrayList(modelsList)));
@@ -95,22 +108,28 @@ public class MainCtrl implements Initializable {
             btnGenerateViews.setVisible(true);
             lblProjectName.setVisible(true);
             lblProjectName.setText(externApplicationDirectory.getName());
-        } catch (MyFileException ex) {
+
+        } catch (Exception ex) {
             JfxPopup.displayError("Erreur", "Pas de Beans dans le répertoire courant !", ex.getMessage());
         }
     }
 
     @FXML
     private void generateViews(ActionEvent event) {
+        ObservableList<Selection> selected = tableChoose.getSelectionModel().getSelectedItems();
 
+        try {
+            wrk.readBeans(selected);
+        } catch (MyFileException ex) {
+            JfxPopup.displayError("Erreur", "Chemin de fichier nul !", ex.getMessage());
+        }
     }
 
     private ArrayList<String> searchModels() {
         return wrk.searchModels();
     }
 
-    private ArrayList<String> searchBeans(File beansDirectory) throws MyFileException {
+    private ArrayList<File> searchBeans(File beansDirectory) throws MyFileException {
         return wrk.searchBeans(beansDirectory);
     }
-
 }
