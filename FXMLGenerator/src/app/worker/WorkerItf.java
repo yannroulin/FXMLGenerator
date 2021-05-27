@@ -25,4 +25,6 @@ public interface WorkerItf {
     void prepareFxml(ArrayList<String> list, Selection bean, String path) throws MyFileException;
 
     void prepareCtrl(ArrayList<String> list, Selection bean, String path) throws MyFileException;
+
+    public void prepareMainView(ObservableList<Selection> listBeans, Selection bean, String path) throws MyFileException;
 }

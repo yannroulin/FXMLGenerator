@@ -16,8 +16,9 @@ import javafx.collections.ObservableList;
  */
 public class Worker implements WorkerItf {
 
-    public static final String PATH_TO_MODEL = ".\\src\\app\\modelsviews\\FormView.fxml";
-    public static final String PATH_TO_CTRL = ".\\src\\app\\modelsctrl\\CtrlFormModel.java";
+    public static final String PATH_TO_MODEL = ".\\src\\app\\models\\FormView.fxml";
+    public static final String PATH_TO_CTRL = ".\\src\\app\\utils\\CtrlFormModel.java";
+    public static final String PATH_TO_MAINVIEW = ".\\src\\app\\utils\\MainView.fxml";
     private WorkerFile wrk;
 
     public Worker() {
@@ -62,6 +63,7 @@ public class Worker implements WorkerItf {
             }
             prepareFxml(attributes, beanInfo, PATH_TO_MODEL);
             prepareCtrl(attributes, beanInfo, PATH_TO_CTRL);
+            prepareMainView(selected, beanInfo, PATH_TO_MAINVIEW);
         }
     }
 
@@ -148,6 +150,37 @@ public class Worker implements WorkerItf {
             bytes = content.getBytes();
         }
         wrk.writeFile(path, bytes);
+    }
+
+    @Override
+    public void prepareMainView(ObservableList<Selection> listBeans, Selection bean, String path) throws MyFileException {
+
+        List<String> mainFxmlContent = wrk.readFiles(path);
+        String linesToAdd = "";
+        String content = "";
+        byte[] bytes = null;
+        String[] tab;
+
+        for (Selection beanSelect : listBeans) {
+            String fxmlFileName = beanSelect.getBean().replace(".java", "View.fxml");
+            String txt = beanSelect.getBean().replace(".java", "");
+            linesToAdd += "<Tab fx:id=\"tab" + beanSelect.getBean() + "\" text=\"" + txt + "\">\n<content>\n<fx:include fx:id=\"ID" + beanSelect.getBean() + "\" source=\"" + fxmlFileName + "\" /> \n </content>\n</Tab>";
+        }
+
+        String destinationFolder = bean.getPath().replace(bean.getBean(), "");
+        destinationFolder += "..\\models\\MainView.fxml";
+        Path pathFinalDirectory = Paths.get(destinationFolder);
+
+        for (String line : mainFxmlContent) {
+            if (line.contains("<!--insert here-->")) {
+                content += "\n" + linesToAdd;
+            } else {
+                content += line;
+            }
+            bytes = content.getBytes();
+        }
+        wrk.writeFile(pathFinalDirectory, bytes);
+
     }
 
     @Override

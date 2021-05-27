@@ -110,7 +110,7 @@ public class MainCtrl implements Initializable {
         try {
             wrk.getAttributesofBeans(selected);
         } catch (MyFileException ex) {
-            JfxPopup.displayError("Erreur", "Chemin de fichier null, veuillez créer un répertoire 'app.models' !", ex.getMessage());
+            JfxPopup.displayError("Erreur", "Erreur dans la génération de vos vues !", ex.getMessage());
         }
     }
 

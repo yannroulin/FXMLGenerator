@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class WorkerFile {
 
-    public static final String DEFAULT_FXML_PATH = "\\src\\app\\modelsviews\\";
+    public static final String DEFAULT_FXML_PATH = "\\src\\app\\models\\";
 
     public List<String> readFiles(String path) throws MyFileException {
         byte[] bytesTab;
@@ -68,10 +68,12 @@ public class WorkerFile {
     }
 
     public void writeFile(Path path, byte[] bytes) throws MyFileException {
+        System.out.println(path.toString());
         try {
             Files.write(path, bytes);
         } catch (IOException ex) {
             throw new MyFileException("Worker.writeFxml\n" + "Erreur dans la génération de votre vue !", false);
         }
     }
+    
 }
