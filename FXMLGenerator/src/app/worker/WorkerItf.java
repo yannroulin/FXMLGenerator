@@ -24,5 +24,9 @@ public interface WorkerItf {
     
     void writeFxml(ArrayList<String> list, Selection bean) throws MyFileException;
     
+    void writeCtrl(ArrayList<String> list, Selection bean) throws MyFileException;
+    
     List<String> readFxml() throws MyFileException;
+    
+    List<String> readCtrl() throws MyFileException;
 }

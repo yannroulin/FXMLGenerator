@@ -19,7 +19,8 @@ import javafx.collections.ObservableList;
  */
 public class Worker implements WorkerItf {
 
-    public static final String DEFAULT_MODELS_PATH = "\\src\\app\\models\\";
+    public static final String DEFAULT_FXML_PATH = "\\src\\app\\viewsmodels\\";
+    public static final String DEFAULT_CTRL_PATH = "\\src\\app\\ctrlmodels\\";
 
     @Override
     public ArrayList<File> searchBeans(File beansDirectory) throws MyFileException {
@@ -41,7 +42,7 @@ public class Worker implements WorkerItf {
 
     @Override
     public ArrayList<String> searchModels() {
-        File modelsDirectory = new File("." + DEFAULT_MODELS_PATH);
+        File modelsDirectory = new File("." + DEFAULT_FXML_PATH);
         File[] tableModels = modelsDirectory.listFiles();
         ArrayList<String> models = new ArrayList<>();
 
@@ -94,6 +95,7 @@ public class Worker implements WorkerItf {
                     }
                 }
                 writeFxml(attributes, beanInfo);
+                writeCtrl(attributes, beanInfo);
             } catch (IOException e) {
                 throw new MyFileException("Worker.readBeans\n" + "Lecture de fichier impossible", false);
             }
@@ -138,14 +140,17 @@ public class Worker implements WorkerItf {
         }
 
         String destinationFolder = bean.getPath().replace(bean.getBean(), "");
-        String fileName = bean.getBean().replace(".java", "View.fxml");
         destinationFolder += "..\\models\\";
+        String link = bean.getBean().replace(".java", "Ctrl");
+        String fileName = bean.getBean().replace(".java", "View.fxml");
         Path path = Paths.get(destinationFolder + fileName);
         String content = "";
 
         for (String line : linesOfFxmlFile) {
             if (line.contains("<!--insert here-->")) {
                 content += "\n" + xmlFileForm;
+            } else if (line.contains("fx:controller=\"\"")) {
+                content += "<BorderPane maxHeight=\"-Infinity\" maxWidth=\"-Infinity\" minHeight=\"-Infinity\" minWidth=\"-Infinity\" prefHeight=\"524.0\" prefWidth=\"600.0\" xmlns=\"http://javafx.com/javafx/11.0.1\" xmlns:fx=\"http://javafx.com/fxml/1\" fx:controller=\"app.models." + link + "\">\n";
             } else {
                 content += line;
             }
@@ -157,6 +162,42 @@ public class Worker implements WorkerItf {
         } catch (IOException ex) {
             throw new MyFileException("Worker.readFxml\n" + "Erreur dans la génération de votre vue !", false);
         }
+    }
+
+    @Override
+    public void writeCtrl(ArrayList<String> list, Selection bean) throws MyFileException {
+        String[] tab;
+        byte[] bytes = null;
+        List<String> linesOfCtrlFile = readCtrl();
+        String linesToAdd = "";
+
+        for (String attributes : list) {
+            linesToAdd += "@FXML\n" + attributes;
+        }
+
+        String destinationFolder = bean.getPath().replace(bean.getBean(), "");
+        destinationFolder += "..\\models\\";
+        String fileName = bean.getBean().replace(".java", "Ctrl.java");
+        Path path = Paths.get(destinationFolder + fileName);
+        String className = fileName.replace(".java", "");
+        String content = "";
+
+        for (String line : linesOfCtrlFile) {
+            if (line.contains("//insert here")) {
+                content += "\n" + linesToAdd;
+            } else if (line.contains("public class CtrlFormModel implements Initializable {")) {
+                content += "public class " + className + " implements Initializable {";
+            } else {
+                content += line;
+            }
+            bytes = content.getBytes();
+        }
+
+        try {
+            Files.write(path, bytes);
+        } catch (IOException ex) {
+            throw new MyFileException("Worker.readFxml\n" + "Erreur dans la génération du contrôleur de votre vue !", false);
+        }
 
     }
 
@@ -166,11 +207,30 @@ public class Worker implements WorkerItf {
         List<String> lines;
         Path finalPath;
 
-        finalPath = Paths.get("." + DEFAULT_MODELS_PATH + "FormView.fxml");
+        finalPath = Paths.get("." + DEFAULT_FXML_PATH + "FormView.fxml");
 
         try {
             bytesTab = Files.readAllBytes(finalPath);
             lines = Files.readAllLines(finalPath, Charset.forName("UTF-8"));
+
+        } catch (IOException ex) {
+            throw new MyFileException("Worker.readFxml\n" + "Lecture de fichier impossible", false);
+        }
+        return lines;
+    }
+
+    @Override
+    public List<String> readCtrl() throws MyFileException {
+        byte[] bytesTab;
+        List<String> lines;
+        Path finalPath;
+
+        finalPath = Paths.get("." + DEFAULT_CTRL_PATH + "CtrlFormModel.java");
+
+        try {
+            bytesTab = Files.readAllBytes(finalPath);
+            lines = Files.readAllLines(finalPath, Charset.forName("UTF-8"));
+            System.out.println(lines);
 
         } catch (IOException ex) {
             throw new MyFileException("Worker.readFxml\n" + "Lecture de fichier impossible", false);
