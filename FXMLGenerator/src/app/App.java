@@ -57,6 +57,9 @@ public class App extends Application {
 
         // rajouter une icône dans la barre de titre de la vue principale
         stage.getIcons().add(new Image(LOGO));
+        
+        //Empêche l'utilisateur de redimensionner l'application
+        stage.setResizable(false);
 
         // afficher cette première vue (tirer le rideau)
         stage.show();

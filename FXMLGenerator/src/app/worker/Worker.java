@@ -104,7 +104,7 @@ public class Worker implements WorkerItf {
                 }
         }
         String destinationFolder = bean.getPath().replace(bean.getBean(), "");
-        destinationFolder += "..\\models\\";
+        destinationFolder += "..\\presentation\\";
         String link = bean.getBean().replace(".java", "Ctrl");
         String fileName = bean.getBean().replace(".java", "View.fxml");
         Path path = Paths.get(destinationFolder + fileName);
@@ -114,7 +114,7 @@ public class Worker implements WorkerItf {
             if (line.contains("<!--insert here-->")) {
                 content += "\n" + xmlFileForm;
             } else if (line.contains("fx:controller=\"\"")) {
-                content += "<BorderPane maxHeight=\"-Infinity\" maxWidth=\"-Infinity\" minHeight=\"-Infinity\" minWidth=\"-Infinity\" prefHeight=\"524.0\" prefWidth=\"600.0\" xmlns=\"http://javafx.com/javafx/11.0.1\" xmlns:fx=\"http://javafx.com/fxml/1\" fx:controller=\"app.models." + link + "\">\n";
+                content += "<BorderPane maxHeight=\"-Infinity\" maxWidth=\"-Infinity\" minHeight=\"-Infinity\" minWidth=\"-Infinity\" prefHeight=\"524.0\" prefWidth=\"600.0\" xmlns=\"http://javafx.com/javafx/11.0.1\" xmlns:fx=\"http://javafx.com/fxml/1\" fx:controller=\"app.presentation." + link + "\">\n";
             } else {
                 content += line;
             }
@@ -135,7 +135,7 @@ public class Worker implements WorkerItf {
         }
 
         String destinationFolder = bean.getPath().replace(bean.getBean(), "");
-        destinationFolder += "..\\models\\";
+        destinationFolder += "..\\presentation\\";
         String fileName = bean.getBean().replace(".java", "Ctrl.java");
         Path path = Paths.get(destinationFolder + fileName);
         String className = fileName.replace(".java", "");
@@ -166,13 +166,14 @@ public class Worker implements WorkerItf {
 
         for (Selection beanSelect : listBeans) {
             String fxmlFileName = beanSelect.getBean().replace(".java", "View.fxml");
-            String txt = beanSelect.getBean().replace(".java", "");
-            linesToAdd += "<Tab fx:id=\"tab" + beanSelect.getBean() + "\" text=\"" + txt + "\">\n<content>\n<fx:include fx:id=\"ID" + beanSelect.getBean() + "\" source=\"" + fxmlFileName + "\" /> \n </content>\n</Tab>";
+            String ids = beanSelect.getBean().replace(".java", "");
+            
+            linesToAdd += "<Tab fx:id=\"tab" + ids + "\" text=\"" + ids + "\">\n<content>\n<fx:include fx:id=\"id" + ids + "\" source=\"" + fxmlFileName + "\" /> \n </content>\n</Tab>";
 
             destinationFolder = beanSelect.getPath().replace(beanSelect.getBean(), "");
         }
 
-        destinationFolder += "..\\models\\MainView.fxml";
+        destinationFolder += "..\\presentation\\MainView.fxml";
         Path pathFinalDirectory = Paths.get(destinationFolder);
 
         for (String line : mainFxmlContent) {
@@ -197,7 +198,7 @@ public class Worker implements WorkerItf {
         }
 
         String destinationFolder = bean.getPath().replace(bean.getBean(), "");
-        destinationFolder += "..\\models\\MainCtrl.java";
+        destinationFolder += "..\\presentation\\MainCtrl.java";
 
         Path pathFinalDirectory = Paths.get(destinationFolder);
 
