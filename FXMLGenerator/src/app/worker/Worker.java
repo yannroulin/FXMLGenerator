@@ -16,10 +16,11 @@ import javafx.collections.ObservableList;
  */
 public class Worker implements WorkerItf {
 
+    private final WorkerFile wrk;
     public static final String PATH_TO_MODEL = ".\\src\\app\\models\\FormView.fxml";
     public static final String PATH_TO_CTRL = ".\\src\\app\\utils\\CtrlFormModel.java";
     public static final String PATH_TO_MAINVIEW = ".\\src\\app\\utils\\MainView.fxml";
-    private WorkerFile wrk;
+    public static final String PATH_TO_MAINCTRL = ".\\src\\app\\utils\\MainCtrl.java";
 
     public Worker() {
         wrk = new WorkerFile();
@@ -63,7 +64,8 @@ public class Worker implements WorkerItf {
             }
             prepareFxml(attributes, beanInfo, PATH_TO_MODEL);
             prepareCtrl(attributes, beanInfo, PATH_TO_CTRL);
-            prepareMainView(selected, beanInfo, PATH_TO_MAINVIEW);
+            prepareMainView(selected, PATH_TO_MAINVIEW);
+            prepareMainCtrl(PATH_TO_MAINCTRL, beanInfo);
         }
     }
 
@@ -153,11 +155,12 @@ public class Worker implements WorkerItf {
     }
 
     @Override
-    public void prepareMainView(ObservableList<Selection> listBeans, Selection bean, String path) throws MyFileException {
+    public void prepareMainView(ObservableList<Selection> listBeans, String path) throws MyFileException {
 
         List<String> mainFxmlContent = wrk.readFiles(path);
         String linesToAdd = "";
         String content = "";
+        String destinationFolder = "";
         byte[] bytes = null;
         String[] tab;
 
@@ -165,9 +168,10 @@ public class Worker implements WorkerItf {
             String fxmlFileName = beanSelect.getBean().replace(".java", "View.fxml");
             String txt = beanSelect.getBean().replace(".java", "");
             linesToAdd += "<Tab fx:id=\"tab" + beanSelect.getBean() + "\" text=\"" + txt + "\">\n<content>\n<fx:include fx:id=\"ID" + beanSelect.getBean() + "\" source=\"" + fxmlFileName + "\" /> \n </content>\n</Tab>";
+
+            destinationFolder = beanSelect.getPath().replace(beanSelect.getBean(), "");
         }
 
-        String destinationFolder = bean.getPath().replace(bean.getBean(), "");
         destinationFolder += "..\\models\\MainView.fxml";
         Path pathFinalDirectory = Paths.get(destinationFolder);
 
@@ -180,7 +184,26 @@ public class Worker implements WorkerItf {
             bytes = content.getBytes();
         }
         wrk.writeFile(pathFinalDirectory, bytes);
+    }
 
+    @Override
+    public void prepareMainCtrl(String pathofCtrl, Selection bean) throws MyFileException {
+        List<String> mainCtrlContent = wrk.readFiles(pathofCtrl);
+        String content = "";
+        byte[] bytes = null;
+
+        for (String line : mainCtrlContent) {
+            content += line;
+        }
+
+        String destinationFolder = bean.getPath().replace(bean.getBean(), "");
+        destinationFolder += "..\\models\\MainCtrl.java";
+
+        Path pathFinalDirectory = Paths.get(destinationFolder);
+
+        bytes = content.getBytes();
+
+        wrk.writeFile(pathFinalDirectory, bytes);
     }
 
     @Override
@@ -192,5 +215,4 @@ public class Worker implements WorkerItf {
     public ArrayList<String> searchModels() {
         return wrk.searchModels();
     }
-
 }

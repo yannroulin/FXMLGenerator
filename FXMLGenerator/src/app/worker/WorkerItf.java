@@ -3,7 +3,6 @@ package app.worker;
 import app.beans.Selection;
 import app.exceptions.MyFileException;
 import java.io.File;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import javafx.collections.ObservableList;
 
@@ -26,5 +25,7 @@ public interface WorkerItf {
 
     void prepareCtrl(ArrayList<String> list, Selection bean, String path) throws MyFileException;
 
-    public void prepareMainView(ObservableList<Selection> listBeans, Selection bean, String path) throws MyFileException;
+    void prepareMainView(ObservableList<Selection> listBeans, String path) throws MyFileException;
+
+    public void prepareMainCtrl(String path, Selection bean) throws MyFileException;
 }

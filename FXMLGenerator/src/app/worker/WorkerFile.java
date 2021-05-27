@@ -68,7 +68,6 @@ public class WorkerFile {
     }
 
     public void writeFile(Path path, byte[] bytes) throws MyFileException {
-        System.out.println(path.toString());
         try {
             Files.write(path, bytes);
         } catch (IOException ex) {
