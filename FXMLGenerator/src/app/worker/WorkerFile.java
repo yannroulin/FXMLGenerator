@@ -21,8 +21,16 @@ import java.util.List;
  */
 public class WorkerFile {
 
+    //Constante contenant le répertoire des mdèles
     public static final String DEFAULT_FXML_PATH = "\\src\\app\\models\\";
 
+    /**
+     * Lis le fichier via le chemin reçu en paramètre
+     *
+     * @param path CHemin du fichier à lire
+     * @return List<String> contenant les lignes du fichier lu
+     * @throws MyFileException Remonte les exceptions si générées
+     */
     public List<String> readFiles(String path) throws MyFileException {
         byte[] bytesTab;
         List<String> lines;
@@ -30,6 +38,7 @@ public class WorkerFile {
         Path finalPath = Paths.get(path);
 
         try {
+            //Lis le fichier et l'ajoute dans une variable
             bytesTab = Files.readAllBytes(finalPath);
             lines = Files.readAllLines(finalPath, Charset.forName("UTF-8"));
 
@@ -39,23 +48,29 @@ public class WorkerFile {
         return lines;
     }
 
+    /**
+     * Cherche les beans dans le répertoire reçu en paramètre
+     *
+     * @param beansDirectory Répertoire dans lequel chercher
+     * @return ArrayList<File> contenant les beans trouvés
+     * @throws MyFileException Remonte les exceptions si générées
+     */
     public ArrayList<File> searchBeans(File beansDirectory) throws MyFileException {
         ArrayList<File> beansList = new ArrayList<>();
 
-        try {
-            File[] flist = beansDirectory.listFiles();
-            if (flist.length == 0) {
-                throw new MyFileException("Worker.searchBeans\n" + "Le répertoire que vous avez séléctionné ne contient pas de beans !", false);
-            }
-            for (File file : flist) {
-                beansList.add(file);
-            }
-        } catch (MyFileException ex) {
-            throw new MyFileException("Worker.searchBeans\n" + "Le répertoire que vous avez séléctionné ne contient pas de beans !", false);
+        //Liste les fichiers du répertoire
+        File[] flist = beansDirectory.listFiles();
+        for (File file : flist) {
+            beansList.add(file);
         }
         return beansList;
     }
 
+    /**
+     * Recherche les modèles en fonction de la constante
+     *
+     * @return ArrayList<String> contenant les modèles trouvés
+     */
     public ArrayList<String> searchModels() {
         File modelsDirectory = new File("." + DEFAULT_FXML_PATH);
         File[] tableModels = modelsDirectory.listFiles();
@@ -67,6 +82,14 @@ public class WorkerFile {
         return models;
     }
 
+    /**
+     * Ecrit un fichier avec le tableau de bytes reçu en paramètres ainsi que le
+     * chemin de fichier.
+     *
+     * @param path Destination de l'écriture du fichier
+     * @param bytes Tableau de bytes contenant le contenu du fichier écrire
+     * @throws MyFileException Remonte les exceptions si générées
+     */
     public void writeFile(Path path, byte[] bytes) throws MyFileException {
         try {
             Files.write(path, bytes);
@@ -74,5 +97,5 @@ public class WorkerFile {
             throw new MyFileException("Worker.writeFxml\n" + "Erreur dans la génération de votre vue !", false);
         }
     }
-    
+
 }
