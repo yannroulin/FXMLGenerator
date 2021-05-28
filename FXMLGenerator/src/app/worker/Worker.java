@@ -17,6 +17,7 @@ import javafx.collections.ObservableList;
 public class Worker implements WorkerItf {
 
     private final WorkerFile wrk;
+    public static final int MAX_PANE_NUMBER = 10;
     public static final String PATH_TO_MODEL = ".\\src\\app\\models\\FormView.fxml";
     public static final String PATH_TO_CTRL = ".\\src\\app\\utils\\CtrlFormModel.java";
     public static final String PATH_TO_MAINVIEW = ".\\src\\app\\utils\\MainView.fxml";
@@ -48,24 +49,28 @@ public class Worker implements WorkerItf {
     public void getAttributesofBeans(ObservableList<Selection> selected) throws MyFileException {
 
         String filePath;
+        int compteur = 0;
 
         for (Selection beanInfo : selected) {
+            compteur++;
 
-            filePath = beanInfo.getPath();
-            byte[] tab;
+            if (compteur <= MAX_PANE_NUMBER) {
+                filePath = beanInfo.getPath();
+                byte[] tab;
 
-            ArrayList<String> attributes = new ArrayList<>();
-            List<String> lines = wrk.readFiles(filePath);
+                ArrayList<String> attributes = new ArrayList<>();
+                List<String> lines = wrk.readFiles(filePath);
 
-            for (String line : lines) {
-                if (line.contains("private")) {
-                    attributes.add(line);
+                for (String line : lines) {
+                    if (line.contains("private")) {
+                        attributes.add(line);
+                    }
                 }
+                prepareFxml(attributes, beanInfo, PATH_TO_MODEL);
+                prepareCtrl(attributes, beanInfo, PATH_TO_CTRL);
+                prepareMainView(selected, PATH_TO_MAINVIEW);
+                prepareMainCtrl(PATH_TO_MAINCTRL, beanInfo);
             }
-            prepareFxml(attributes, beanInfo, PATH_TO_MODEL);
-            prepareCtrl(attributes, beanInfo, PATH_TO_CTRL);
-            prepareMainView(selected, PATH_TO_MAINVIEW);
-            prepareMainCtrl(PATH_TO_MAINCTRL, beanInfo);
         }
     }
 
@@ -76,6 +81,7 @@ public class Worker implements WorkerItf {
         String[] tab;
         int rowIndex = -1;
         int columnIndex = -1;
+        int compteur = 0;
         byte[] bytes = null;
 
         List<String> linesOfFxmlFile = wrk.readFiles(pathToModel);
@@ -110,21 +116,22 @@ public class Worker implements WorkerItf {
                             + "<Insets left=\"20.0\" right=\"20.0\" /></GridPane.margin></DatePicker>";
                     break;
                 default:
-
             }
         }
+
         String destinationFolder = bean.getPath().replace(bean.getBean(), "");
         destinationFolder += "..\\presentation\\";
         String link = bean.getBean().replace(".java", "Ctrl");
         String fileName = bean.getBean().replace(".java", "View.fxml");
         Path path = Paths.get(destinationFolder + fileName);
+        int pageSize = 148 + (list.size() * 30);
         String content = "";
 
         for (String line : linesOfFxmlFile) {
             if (line.contains("<!--insert here-->")) {
                 content += "\n" + xmlFileForm;
             } else if (line.contains("fx:controller=\"\"")) {
-                content += "<BorderPane maxHeight=\"-Infinity\" maxWidth=\"-Infinity\" minHeight=\"-Infinity\" minWidth=\"-Infinity\" prefHeight=\"524.0\" prefWidth=\"600.0\" xmlns=\"http://javafx.com/javafx/11.0.1\" xmlns:fx=\"http://javafx.com/fxml/1\" fx:controller=\"app.presentation." + link + "\">\n";
+                content += "<BorderPane maxHeight=\"-Infinity\" maxWidth=\"-Infinity\" minHeight=\"-Infinity\" minWidth=\"-Infinity\" prefHeight=\"" + pageSize + "\" prefWidth=\"600.0\" xmlns=\"http://javafx.com/javafx/11.0.1\" xmlns:fx=\"http://javafx.com/fxml/1\" fx:controller=\"app.presentation." + link + "\">\n";
             } else {
                 content += line;
             }
@@ -139,6 +146,7 @@ public class Worker implements WorkerItf {
         byte[] bytes = null;
         List<String> linesOfCtrlFile = wrk.readFiles(pathToCtrl);
         String linesToAdd = "";
+        int compteur = 0;
 
         for (String attributes : list) {
             linesToAdd += "@FXML\n" + attributes;
@@ -173,8 +181,10 @@ public class Worker implements WorkerItf {
         String destinationFolder = "";
         byte[] bytes = null;
         String[] tab;
+        int compteur = 0;
 
         for (Selection beanSelect : listBeans) {
+            compteur++;
             String fxmlFileName = beanSelect.getBean().replace(".java", "View.fxml");
             String ids = beanSelect.getBean().replace(".java", "");
 
@@ -201,6 +211,7 @@ public class Worker implements WorkerItf {
     public void prepareMainCtrl(String pathofCtrl, Selection bean) throws MyFileException {
         List<String> mainCtrlContent = wrk.readFiles(pathofCtrl);
         String content = "";
+        int compteur = 0;
         byte[] bytes = null;
 
         for (String line : mainCtrlContent) {
