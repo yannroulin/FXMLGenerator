@@ -78,6 +78,7 @@ public class Worker implements WorkerItf {
     public void prepareFxml(ArrayList<String> list, Selection bean, String pathToModel) throws MyFileException {
         String xmlFileForm = "";
         String xmlFileList = "";
+        String rowConstraints = "";
         String[] tab;
         int rowIndex = -1;
         byte[] bytes = null;
@@ -91,6 +92,7 @@ public class Worker implements WorkerItf {
             switch (tab[2]) {
                 case "String":
                     rowIndex++;
+                    rowConstraints += "<RowConstraints minHeight=\"10.0\" prefHeight=\"30.0\" vgrow=\"SOMETIMES\" />";
                     xmlFileForm += "<Label fx:id=\"" + "lbl" + replaceAttribut + "\" prefHeight=\"17.0\" prefWidth=\"122.0\" text=\"" + replaceAttribut + "\" GridPane.rowIndex=\"" + rowIndex + "\"> "
                             + "<GridPane.margin>\n <Insets bottom=\"20.0\" left=\"10.0\" right=\"10.0\" top=\"20.0\" />\n</GridPane.margin> </Label>\n"
                             + "<TextField fx:id=\"" + "txt" + replaceAttribut + "\" prefHeight=\"25.0\" prefWidth=\"193.0\" GridPane.columnIndex=\"1\" GridPane.rowIndex=\"" + rowIndex + "\" > \n"
@@ -98,6 +100,7 @@ public class Worker implements WorkerItf {
                     break;
                 case "int":
                     rowIndex++;
+                    rowConstraints += "<RowConstraints minHeight=\"10.0\" prefHeight=\"30.0\" vgrow=\"SOMETIMES\" />";
                     xmlFileForm += "<Label fx:id=\"" + "lbl" + replaceAttribut + "\" prefHeight=\"17.0\" prefWidth=\"122.0\" text=\"" + replaceAttribut + "\" GridPane.rowIndex=\"" + rowIndex + "\"> "
                             + "<GridPane.margin>\n <Insets bottom=\"20.0\" left=\"10.0\" right=\"10.0\" top=\"20.0\" />\n</GridPane.margin> </Label>\n"
                             + "<TextField fx:id=\"" + "txt" + replaceAttribut + "\" prefHeight=\"25.0\" prefWidth=\"193.0\" GridPane.columnIndex=\"1\" GridPane.rowIndex=\"" + rowIndex + "\" > \n"
@@ -105,6 +108,7 @@ public class Worker implements WorkerItf {
                     break;
                 case "Date":
                     rowIndex++;
+                    rowConstraints += "<RowConstraints minHeight=\"10.0\" prefHeight=\"30.0\" vgrow=\"SOMETIMES\" />";
                     xmlFileForm += "<Label fx:id=\"" + "lbl" + replaceAttribut + "\" prefHeight=\"17.0\" prefWidth=\"122.0\" text=\"" + replaceAttribut + "\" GridPane.rowIndex=\"" + rowIndex + "\"> "
                             + "<GridPane.margin>\n <Insets bottom=\"20.0\" left=\"10.0\" right=\"10.0\" top=\"20.0\" />\n</GridPane.margin> </Label>\n"
                             + "<DatePicker fx:id=\"" + "dp" + replaceAttribut + "\" prefHeight=\"25.0\" prefWidth=\"455.0\" GridPane.columnIndex=\"1\" GridPane.rowIndex=\"" + rowIndex + "\"><GridPane.margin>"
@@ -125,6 +129,8 @@ public class Worker implements WorkerItf {
         for (String line : linesOfFxmlFile) {
             if (line.contains("<!--insert here-->")) {
                 content += "\n" + xmlFileForm;
+            } else if (line.contains("<!--insert row-->")) {
+                content += rowConstraints;
             } else if (line.contains("fx:controller=\"\"")) {
                 content += "<BorderPane maxHeight=\"-Infinity\" maxWidth=\"-Infinity\" minHeight=\"-Infinity\" minWidth=\"-Infinity\" xmlns=\"http://javafx.com/javafx/11.0.1\" xmlns:fx=\"http://javafx.com/fxml/1\" fx:controller=\"app.presentation." + link + "\">\n";
             } else {
