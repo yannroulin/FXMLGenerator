@@ -81,27 +81,37 @@ public class Worker implements WorkerItf {
         List<String> linesOfFxmlFile = wrk.readFiles(pathToModel);
 
         for (String attributes : list) {
-            rowIndex++;
-            columnIndex++;
             tab = attributes.split("\\s+");
             String replaceAttribut = tab[3].replace(";", "");
 
             switch (tab[2]) {
                 case "String":
+                    rowIndex++;
+                    columnIndex++;
                     xmlFileForm += "<Label fx:id=\"" + "lbl" + replaceAttribut + "\" prefHeight=\"17.0\" prefWidth=\"122.0\" text=\"" + replaceAttribut + "\" GridPane.rowIndex=\"" + rowIndex + "\"> "
                             + "<GridPane.margin>\n <Insets bottom=\"20.0\" left=\"10.0\" right=\"10.0\" top=\"20.0\" />\n</GridPane.margin> </Label>\n"
                             + "<TextField fx:id=\"" + "txt" + replaceAttribut + "\" prefHeight=\"25.0\" prefWidth=\"193.0\" GridPane.columnIndex=\"1\" GridPane.rowIndex=\"" + rowIndex + "\" > \n"
                             + "<GridPane.margin>\n <Insets left=\"20.0\" right=\"20.0\"/>\n </GridPane.margin>\n </TextField>";
                     break;
                 case "int":
+                    rowIndex++;
+                    columnIndex++;
                     xmlFileForm += "<Label fx:id=\"" + "lbl" + replaceAttribut + "\" prefHeight=\"17.0\" prefWidth=\"122.0\" text=\"" + replaceAttribut + "\" GridPane.rowIndex=\"" + rowIndex + "\"> "
                             + "<GridPane.margin>\n <Insets bottom=\"20.0\" left=\"10.0\" right=\"10.0\" top=\"20.0\" />\n</GridPane.margin> </Label>\n"
                             + "<TextField fx:id=\"" + "txt" + replaceAttribut + "\" prefHeight=\"25.0\" prefWidth=\"193.0\" GridPane.columnIndex=\"1\" GridPane.rowIndex=\"" + rowIndex + "\" > \n"
                             + "<GridPane.margin>\n <Insets left=\"20.0\" right=\"20.0\"/>\n </GridPane.margin>\n </TextField>";
                     break;
+                case "Date":
+                    rowIndex++;
+                    columnIndex++;
+                    xmlFileForm += "<Label fx:id=\"" + "lbl" + replaceAttribut + "\" prefHeight=\"17.0\" prefWidth=\"122.0\" text=\"" + replaceAttribut + "\" GridPane.rowIndex=\"" + rowIndex + "\"> "
+                            + "<GridPane.margin>\n <Insets bottom=\"20.0\" left=\"10.0\" right=\"10.0\" top=\"20.0\" />\n</GridPane.margin> </Label>\n"
+                            + "<DatePicker fx:id=\"" + "dp" + replaceAttribut + "\" prefHeight=\"25.0\" prefWidth=\"455.0\" GridPane.columnIndex=\"1\" GridPane.rowIndex=\"" + rowIndex + "\"><GridPane.margin>"
+                            + "<Insets left=\"20.0\" right=\"20.0\" /></GridPane.margin></DatePicker>";
+                    break;
                 default:
-                // code block
-                }
+
+            }
         }
         String destinationFolder = bean.getPath().replace(bean.getBean(), "");
         destinationFolder += "..\\presentation\\";
@@ -167,7 +177,7 @@ public class Worker implements WorkerItf {
         for (Selection beanSelect : listBeans) {
             String fxmlFileName = beanSelect.getBean().replace(".java", "View.fxml");
             String ids = beanSelect.getBean().replace(".java", "");
-            
+
             linesToAdd += "<Tab fx:id=\"tab" + ids + "\" text=\"" + ids + "\">\n<content>\n<fx:include fx:id=\"id" + ids + "\" source=\"" + fxmlFileName + "\" /> \n </content>\n</Tab>";
 
             destinationFolder = beanSelect.getPath().replace(beanSelect.getBean(), "");
