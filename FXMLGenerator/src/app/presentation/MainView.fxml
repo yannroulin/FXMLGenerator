@@ -22,7 +22,7 @@
       </TableView>
    </center>
    <left>
-      <VBox alignment="TOP_CENTER" prefHeight="353.0" prefWidth="276.0" BorderPane.alignment="CENTER">
+      <VBox alignment="TOP_CENTER" prefHeight="0.0" prefWidth="0.0" BorderPane.alignment="CENTER">
          <children>
             <ImageView fx:id="imgLogo" fitHeight="84.0" fitWidth="254.0" pickOnBounds="true" preserveRatio="true">
                <VBox.margin>

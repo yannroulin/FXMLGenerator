@@ -80,8 +80,6 @@ public class Worker implements WorkerItf {
         String xmlFileList = "";
         String[] tab;
         int rowIndex = -1;
-        int columnIndex = -1;
-        int compteur = 0;
         byte[] bytes = null;
 
         List<String> linesOfFxmlFile = wrk.readFiles(pathToModel);
@@ -93,7 +91,6 @@ public class Worker implements WorkerItf {
             switch (tab[2]) {
                 case "String":
                     rowIndex++;
-                    columnIndex++;
                     xmlFileForm += "<Label fx:id=\"" + "lbl" + replaceAttribut + "\" prefHeight=\"17.0\" prefWidth=\"122.0\" text=\"" + replaceAttribut + "\" GridPane.rowIndex=\"" + rowIndex + "\"> "
                             + "<GridPane.margin>\n <Insets bottom=\"20.0\" left=\"10.0\" right=\"10.0\" top=\"20.0\" />\n</GridPane.margin> </Label>\n"
                             + "<TextField fx:id=\"" + "txt" + replaceAttribut + "\" prefHeight=\"25.0\" prefWidth=\"193.0\" GridPane.columnIndex=\"1\" GridPane.rowIndex=\"" + rowIndex + "\" > \n"
@@ -101,7 +98,6 @@ public class Worker implements WorkerItf {
                     break;
                 case "int":
                     rowIndex++;
-                    columnIndex++;
                     xmlFileForm += "<Label fx:id=\"" + "lbl" + replaceAttribut + "\" prefHeight=\"17.0\" prefWidth=\"122.0\" text=\"" + replaceAttribut + "\" GridPane.rowIndex=\"" + rowIndex + "\"> "
                             + "<GridPane.margin>\n <Insets bottom=\"20.0\" left=\"10.0\" right=\"10.0\" top=\"20.0\" />\n</GridPane.margin> </Label>\n"
                             + "<TextField fx:id=\"" + "txt" + replaceAttribut + "\" prefHeight=\"25.0\" prefWidth=\"193.0\" GridPane.columnIndex=\"1\" GridPane.rowIndex=\"" + rowIndex + "\" > \n"
@@ -109,7 +105,6 @@ public class Worker implements WorkerItf {
                     break;
                 case "Date":
                     rowIndex++;
-                    columnIndex++;
                     xmlFileForm += "<Label fx:id=\"" + "lbl" + replaceAttribut + "\" prefHeight=\"17.0\" prefWidth=\"122.0\" text=\"" + replaceAttribut + "\" GridPane.rowIndex=\"" + rowIndex + "\"> "
                             + "<GridPane.margin>\n <Insets bottom=\"20.0\" left=\"10.0\" right=\"10.0\" top=\"20.0\" />\n</GridPane.margin> </Label>\n"
                             + "<DatePicker fx:id=\"" + "dp" + replaceAttribut + "\" prefHeight=\"25.0\" prefWidth=\"455.0\" GridPane.columnIndex=\"1\" GridPane.rowIndex=\"" + rowIndex + "\"><GridPane.margin>"
@@ -131,7 +126,7 @@ public class Worker implements WorkerItf {
             if (line.contains("<!--insert here-->")) {
                 content += "\n" + xmlFileForm;
             } else if (line.contains("fx:controller=\"\"")) {
-                content += "<BorderPane maxHeight=\"-Infinity\" maxWidth=\"-Infinity\" minHeight=\"-Infinity\" minWidth=\"-Infinity\" prefHeight=\"" + pageSize + "\" prefWidth=\"600.0\" xmlns=\"http://javafx.com/javafx/11.0.1\" xmlns:fx=\"http://javafx.com/fxml/1\" fx:controller=\"app.presentation." + link + "\">\n";
+                content += "<BorderPane maxHeight=\"-Infinity\" maxWidth=\"-Infinity\" minHeight=\"-Infinity\" minWidth=\"-Infinity\" xmlns=\"http://javafx.com/javafx/11.0.1\" xmlns:fx=\"http://javafx.com/fxml/1\" fx:controller=\"app.presentation." + link + "\">\n";
             } else {
                 content += line;
             }
@@ -215,6 +210,10 @@ public class Worker implements WorkerItf {
         byte[] bytes = null;
 
         for (String line : mainCtrlContent) {
+
+            if (line.contains("/*insert package*/")) {
+                content += "package app.presentation;";
+            }
             content += line;
         }
 
