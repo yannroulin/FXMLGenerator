@@ -8,7 +8,7 @@
     <center>
         <TabPane fx:id="tabPane" prefHeight="524.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
             <tabs>
-                <!--insert here-->
+                 <!--FXML Generator - insert here -->
             </tabs>
         </TabPane>
     </center>

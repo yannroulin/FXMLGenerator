@@ -182,11 +182,11 @@ public class Worker implements WorkerItf {
         //Parcours les lignes du modèles FXML par défaut
         for (String line : linesOfFxmlFile) {
             //Recherche le commentaire
-            if (line.contains("<!--insert here-->")) {
+            if (line.contains("<!--FXML Generator - insert here -->")) {
                 //Ajoute les nouvelles balises après le commentaire
                 content += "\n" + xmlFileForm;
                 //Recherche le commentaire
-            } else if (line.contains("<!--insert row-->")) {
+            } else if (line.contains("<!--FXML Generator - insert row -->")) {
                 //Ajoute les contarintes pour chaque ligne
                 content += rowConstraints;
             } else if (line.contains("fx:controller=\"\"")) {
@@ -239,7 +239,7 @@ public class Worker implements WorkerItf {
         //Parcours les lignes du modèle Ctrl par défaut
         for (String line : linesOfCtrlFile) {
             //Recherche le commentaire
-            if (line.contains("//insert here")) {
+            if (line.contains("//FXML Generator - insert here")) {
                 //Ajoute le code correspondant aux attributs
                 content += "\n" + linesToAdd;
             } else if (line.contains("public class CtrlFormModel implements Initializable {")) {
@@ -291,7 +291,7 @@ public class Worker implements WorkerItf {
         //Parcours les lignes du MainView.fxmlpar défaut
         for (String line : mainFxmlContent) {
             //Recherche le commentaire
-            if (line.contains("<!--insert here-->")) {
+            if (line.contains(" <!--FXML Generator - insert here -->")) {
                 //Ajoute les nouvelles balises après le commentaire
                 content += "\n" + linesToAdd;
             } else {
@@ -320,7 +320,7 @@ public class Worker implements WorkerItf {
 
         for (String line : mainCtrlContent) {
             //Recherche le commentaire
-            if (line.contains("/*insert package*/")) {
+            if (line.contains("/* FXML Generator - insert package*/")) {
                 //Ajoute le bon package
                 content += "package app.presentation;";
             }

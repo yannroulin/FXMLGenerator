@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-/*insert package*/
+/* FXML Generator - insert package*/
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Platform;

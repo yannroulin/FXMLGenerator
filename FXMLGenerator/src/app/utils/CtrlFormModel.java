@@ -8,7 +8,7 @@ import javafx.fxml.Initializable;
 
 public class CtrlFormModel implements Initializable {
 
-    //insert here
+    //FXML Generator - insert here
     
     /**
      * Initializes the controller class.

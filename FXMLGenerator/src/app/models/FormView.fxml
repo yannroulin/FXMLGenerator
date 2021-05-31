@@ -69,10 +69,10 @@
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="505.0" minWidth="10.0" prefWidth="495.0" />
             </columnConstraints>
             <rowConstraints>
-              <!--insert row-->
+              <!--FXML Generator - insert row -->
             </rowConstraints>
             <children>
-                <!--insert here-->
+                <!--FXML Generator - insert here -->
             </children>
         </GridPane>
     </center>
