@@ -20,12 +20,4 @@ public interface WorkerItf {
     ArrayList<Selection> createSelection(File beansDirectory) throws MyFileException;
 
     void getAttributesofBeans(ObservableList<Selection> selected) throws MyFileException;
-
-    void prepareFxml(ArrayList<String> list, Selection bean, String path) throws MyFileException;
-
-    void prepareCtrl(ArrayList<String> list, Selection bean, String path) throws MyFileException;
-
-    void prepareMainView(ObservableList<Selection> listBeans, String path) throws MyFileException;
-
-    public void prepareMainCtrl(String path, Selection bean) throws MyFileException;
 }

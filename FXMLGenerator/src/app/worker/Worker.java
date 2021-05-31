@@ -117,8 +117,7 @@ public class Worker implements WorkerItf {
      * @param pathToModel Chemin de fichier vers le modèle FXML par défaut
      * @throws MyFileException Remonte les exceptions si générées
      */
-    @Override
-    public void prepareFxml(ArrayList<String> attributesList, Selection bean, String pathToModel) throws MyFileException {
+    private void prepareFxml(ArrayList<String> attributesList, Selection bean, String pathToModel) throws MyFileException {
         String xmlFileForm = "";
         String xmlFileList = "";
         String rowConstraints = "";
@@ -213,8 +212,7 @@ public class Worker implements WorkerItf {
      * défaut
      * @throws MyFileException Remonte les exceptions si générées
      */
-    @Override
-    public void prepareCtrl(ArrayList<String> attributesList, Selection bean, String pathToCtrl) throws MyFileException {
+    private void prepareCtrl(ArrayList<String> attributesList, Selection bean, String pathToCtrl) throws MyFileException {
         String[] tab;
         byte[] bytes = null;
         String linesToAdd = "";
@@ -264,8 +262,7 @@ public class Worker implements WorkerItf {
      * @param path Chemin de fichier du modèle par défaut MainView
      * @throws MyFileException Remonte les exceptions si générées
      */
-    @Override
-    public void prepareMainView(ObservableList<Selection> listBeans, String path) throws MyFileException {
+    private void prepareMainView(ObservableList<Selection> listBeans, String path) throws MyFileException {
         String linesToAdd = "";
         String content = "";
         String destinationFolder = "";
@@ -314,8 +311,7 @@ public class Worker implements WorkerItf {
      * @param bean Bean Selection
      * @throws MyFileException Remonte les exceptions si générées
      */
-    @Override
-    public void prepareMainCtrl(String pathofCtrl, Selection bean) throws MyFileException {
+    private void prepareMainCtrl(String pathofCtrl, Selection bean) throws MyFileException {
         String content = "";
         byte[] bytes = null;
 
