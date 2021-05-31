@@ -56,7 +56,7 @@ public class Worker implements WorkerItf {
                 Selection s = new Selection(bean.getName(), bean.getPath());
                 beansList.add(s);
             }
-        } catch (MyFileException ex) {
+        } catch (Exception ex) {
             throw new MyFileException("Worker.createSelection\n" + "Le répertoire que vous avez séléctionné ne contient pas de beans !", false);
         }
         return beansList;
@@ -353,10 +353,9 @@ public class Worker implements WorkerItf {
      *
      * @param beansDirectory Répertoire dans lequel chercher les beans
      * @return ArrayList<File> contenant les beans
-     * @throws MyFileException Remonte les exceptions si générées
      */
     @Override
-    public ArrayList<File> searchBeans(File beansDirectory) throws MyFileException {
+    public ArrayList<File> searchBeans(File beansDirectory) {
         return wrk.searchBeans(beansDirectory);
     }
 

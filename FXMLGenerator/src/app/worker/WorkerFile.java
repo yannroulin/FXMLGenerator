@@ -53,9 +53,8 @@ public class WorkerFile {
      *
      * @param beansDirectory Répertoire dans lequel chercher
      * @return ArrayList<File> contenant les beans trouvés
-     * @throws MyFileException Remonte les exceptions si générées
      */
-    public ArrayList<File> searchBeans(File beansDirectory) throws MyFileException {
+    public ArrayList<File> searchBeans(File beansDirectory) {
         ArrayList<File> beansList = new ArrayList<>();
 
         //Liste les fichiers du répertoire
