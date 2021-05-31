@@ -7,7 +7,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
 import javafx.collections.ObservableList;
 
 /**
@@ -53,7 +52,7 @@ public class Worker implements WorkerItf {
         try {
             beanName = wrk.searchBeans(beansDirectory);
             for (File bean : beanName) {
-                Selection s = new Selection(bean.getName(), bean.getPath());
+                Selection s = new Selection(bean.getName(), bean.getPath(), "");
                 beansList.add(s);
             }
         } catch (Exception ex) {

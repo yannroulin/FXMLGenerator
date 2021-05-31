@@ -1,30 +1,53 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package app.beans;
 
-/**
- *
- * @author RoulinY01
- */
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 public class Selection {
 
-    private final String bean;
-    private final String path;
+    private final StringProperty bean = new SimpleStringProperty();
+    private final StringProperty model = new SimpleStringProperty();
+    private final StringProperty path = new SimpleStringProperty();
 
-    public Selection(String bean, String path) {
-        this.bean = bean;
-        this.path = path;
+    public Selection(String bean, String path, String model) {
+        setBean(bean);
+        setModel(model);
+        setPath(path);
     }
 
-    public String getBean() {
-        return bean;
+    public final StringProperty beanProperty() {
+        return this.bean;
     }
 
-    public String getPath() {
-        return path;
+    public final String getBean() {
+        return this.beanProperty().get();
     }
 
+    public final void setBean(final String bean) {
+        this.beanProperty().set(bean);
+    }
+
+    public final StringProperty pathProperty() {
+        return this.path;
+    }
+
+    public final String getPath() {
+        return this.pathProperty().get();
+    }
+
+    public final void setPath(final String path) {
+        this.pathProperty().set(path);
+    }
+
+    public final StringProperty modelProperty() {
+        return this.model;
+    }
+
+    public final String getModel() {
+        return this.modelProperty().get();
+    }
+
+    public final void setModel(final String model) {
+        this.modelProperty().set(model);
+    }
 }

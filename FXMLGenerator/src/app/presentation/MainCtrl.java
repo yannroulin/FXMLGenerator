@@ -13,6 +13,7 @@ import app.worker.WorkerItf;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -26,7 +27,7 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.ComboBoxTableCell;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.DirectoryChooser;
@@ -54,10 +55,6 @@ public class MainCtrl implements Initializable {
     private Button btnGenerateViews;
     @FXML
     private TableView<Selection> tableChoose;
-    @FXML
-    private TableColumn<Selection, String> beansColumn;
-    @FXML
-    private TableColumn<Selection, String> modelsColumn;
 
     /**
      * Méthode exécutée au lancement de l'application
@@ -70,8 +67,6 @@ public class MainCtrl implements Initializable {
         wrk = new Worker();
         Image img = new Image(IMAGES_FOLDER + "logo.png");
         imgLogo.setImage(img);
-        beansColumn.setCellValueFactory(new PropertyValueFactory<Selection, String>("bean"));
-        modelsColumn.setCellValueFactory(new PropertyValueFactory<Selection, String>("modeles"));
     }
 
     /**
@@ -82,6 +77,7 @@ public class MainCtrl implements Initializable {
      */
     @FXML
     private void openExplorer(ActionEvent event) {
+
         //Création de l'explorateur de fichier
         DirectoryChooser chooser = new DirectoryChooser();
         chooser.setTitle("Select your java application folder");
@@ -101,14 +97,30 @@ public class MainCtrl implements Initializable {
             //Appel du Worker pour créer des beans à partir des fichiers
             selectionInFolder = wrk.createSelection(beansDirectory);
 
+            ///Appel du Worker pour récupérer les modèles
+            ArrayList<String> modelsList = searchModels();
+
             //Permission de la sélection multiple dans le tableau
             tableChoose.getSelectionModel().setSelectionMode(
                     SelectionMode.MULTIPLE
             );
-            tableChoose.setItems(FXCollections.observableList(selectionInFolder));
-            ArrayList<String> modelsList = searchModels();
-            modelsColumn.setCellFactory(ComboBoxTableCell.forTableColumn(FXCollections.observableArrayList(modelsList)));
+
+            TableColumn<Selection, String> beansColumn = new TableColumn<>("Beans");
+            beansColumn.prefWidthProperty().bind(tableChoose.widthProperty().multiply(0.5));
+            beansColumn.setResizable(false);
+            beansColumn.setCellValueFactory(cellData -> cellData.getValue().beanProperty());
+            beansColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+            tableChoose.getColumns().add(beansColumn);
+
+            TableColumn<Selection, String> modelsColumn = new TableColumn<>("Models");
+            modelsColumn.prefWidthProperty().bind(tableChoose.widthProperty().multiply(0.5));
+            modelsColumn.setResizable(false);
             modelsColumn.setEditable(true);
+            modelsColumn.setCellValueFactory(cellData -> cellData.getValue().modelProperty());
+            modelsColumn.setCellFactory(ComboBoxTableCell.forTableColumn(FXCollections.observableArrayList(modelsList)));
+            tableChoose.getColumns().add(modelsColumn);
+
+            tableChoose.getItems().addAll(selectionInFolder);
 
             //Bouton de l'explorateur de fichier caché
             btnExplorer.setVisible(false);
@@ -130,8 +142,17 @@ public class MainCtrl implements Initializable {
      */
     @FXML
     private void generateViews(ActionEvent event) {
+
+        tableChoose.getSelectionModel().selectAll();
+        List<Selection> sel = tableChoose.getSelectionModel().getSelectedItems();
+        
+        for (Selection selection : sel) {
+            System.out.println(selection.getBean() + " " + selection.getModel());
+        }
+        
         //Récupère les fichiers sélectionnés dans le tableau
         ObservableList<Selection> selected = tableChoose.getSelectionModel().getSelectedItems();
+
         try {
             //Appel du worker pour traiter les fichiers
             wrk.getAttributesofBeans(selected);
@@ -152,8 +173,7 @@ public class MainCtrl implements Initializable {
     }
 
     /**
-     * Demande au worker de rechercher les beans présents dans
-     * l'application
+     * Demande au worker de rechercher les beans présents dans l'application
      *
      * @return ArrayList<String> contenant les modèles
      */
@@ -169,4 +189,5 @@ public class MainCtrl implements Initializable {
         // obligatoire pour bien terminer une application JavaFX
         Platform.exit();
     }
+
 }
