@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
 import javafx.collections.ObservableList;
 
 /**
@@ -98,7 +99,7 @@ public class Worker implements WorkerItf {
                 //Appel la méthode permettant de générer les FXML
                 prepareFxml(attributes, beanInfo, PATH_TO_MODEL);
                 //Appel la méthode permettant de générer les contrôleurs de vue
-                prepareCtrl(attributes, beanInfo, PATH_TO_CTRL);
+                prepareCtrl(attributes, beanInfo, beansSelectList, PATH_TO_CTRL);
                 //Appel la méthode permettant de générer le MainView
                 prepareMainView(beansSelectList, PATH_TO_MAINVIEW);
                 //Appel la méthode permettant de générer le contrôleur de la MainView
@@ -208,11 +209,13 @@ public class Worker implements WorkerItf {
      *
      * @param attributesList Liste contenant les Attributs des beans
      * @param bean Selection Bean
+     * @param beansSelectedList List de tous les beans sélectionné par
+     * l'utilisateur
      * @param pathToCtrl Chemin de fichier vers le modèle de contrôleur par
      * défaut
      * @throws MyFileException Remonte les exceptions si générées
      */
-    private void prepareCtrl(ArrayList<String> attributesList, Selection bean, String pathToCtrl) throws MyFileException {
+    private void prepareCtrl(ArrayList<String> attributesList, Selection bean, ObservableList<Selection> beansSelectedList, String pathToCtrl) throws MyFileException {
         String[] tab;
         byte[] bytes = null;
         String linesToAdd = "";
@@ -242,6 +245,13 @@ public class Worker implements WorkerItf {
             if (line.contains("//FXML Generator - insert here")) {
                 //Ajoute le code correspondant aux attributs
                 content += "\n" + linesToAdd;
+            } else if (line.contains("//FXML Generator - insert import")) {
+
+                //Parcours les dossiers afin de créer les imports
+                for (Selection file : beansSelectedList) {
+                    content += "import app.beans." + file.getBean().replace(".java", "") + ";";
+                }
+
             } else if (line.contains("public class CtrlFormModel implements Initializable {")) {
                 //Donne un nom de classe correspondant au nom du fichier
                 content += "public class " + className + " implements Initializable {";
