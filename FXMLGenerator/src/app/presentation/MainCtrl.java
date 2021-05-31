@@ -99,6 +99,7 @@ public class MainCtrl implements Initializable {
 
             ///Appel du Worker pour récupérer les modèles
             ArrayList<String> modelsList = searchModels();
+            
 
             //Permission de la sélection multiple dans le tableau
             tableChoose.getSelectionModel().setSelectionMode(
@@ -144,12 +145,7 @@ public class MainCtrl implements Initializable {
     private void generateViews(ActionEvent event) {
 
         tableChoose.getSelectionModel().selectAll();
-        List<Selection> sel = tableChoose.getSelectionModel().getSelectedItems();
-        
-        for (Selection selection : sel) {
-            System.out.println(selection.getBean() + " " + selection.getModel());
-        }
-        
+
         //Récupère les fichiers sélectionnés dans le tableau
         ObservableList<Selection> selected = tableChoose.getSelectionModel().getSelectedItems();
 

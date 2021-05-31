@@ -19,9 +19,11 @@ public class Worker implements WorkerItf {
     private final WorkerFile wrk;
     //Constante représentant le nombre max d'onglet de Beans présents dans la vue principale générée
     public static final int MAX_PANE_NUMBER = 10;
-    //Constante provisoire permettant d'esquiver le problème de récupération de données
-    public static final String PATH_TO_MODEL = ".\\src\\app\\models\\FormView.fxml";
-    //Constante provisoire permettant d'esquiver le problème de récupération de données
+    //Constante contenant le chemin de fichier vers le Form model
+    public static final String PATH_TO_FORM_MODEL = ".\\src\\app\\models\\FormView.fxml";
+    //Constante contenant le chemin de fichier vers le List model
+    public static final String PATH_TO_LIST_MODEL = ".\\src\\app\\models\\ListView.fxml";
+    //Constante contenant le chemin de fichier vers le List model
     public static final String PATH_TO_CTRL = ".\\src\\app\\utils\\CtrlFormModel.java";
     //Constante contenant le chemin de fichier vers le modèle MainView.fxml
     public static final String PATH_TO_MAINVIEW = ".\\src\\app\\utils\\MainView.fxml";
@@ -95,14 +97,23 @@ public class Worker implements WorkerItf {
                         attributes.add(line);
                     }
                 }
-                //Appel la méthode permettant de générer les FXML
-                prepareFxml(attributes, beanInfo, PATH_TO_MODEL);
-                //Appel la méthode permettant de générer les contrôleurs de vue
-                prepareCtrl(attributes, beanInfo, beansSelectList, PATH_TO_CTRL);
-                //Appel la méthode permettant de générer le MainView
-                prepareMainView(beansSelectList, PATH_TO_MAINVIEW);
-                //Appel la méthode permettant de générer le contrôleur de la MainView
-                prepareMainCtrl(PATH_TO_MAINCTRL, beanInfo);
+
+                //Check les choix de modèles fait par l'utilisateur
+                if (beanInfo.getModel().equals("FormView.fxml")) {
+                    //Appel la méthode permettant de générer les FXML
+                    prepareFxml(attributes, beanInfo, PATH_TO_FORM_MODEL);
+                    //Appel la méthode permettant de générer les contrôleurs de vue
+                    prepareCtrl(attributes, beanInfo, beansSelectList, PATH_TO_CTRL);
+                    //Appel la méthode permettant de générer le MainView
+                    prepareMainView(beansSelectList, PATH_TO_MAINVIEW);
+                    //Appel la méthode permettant de générer le contrôleur de la MainView
+                    prepareMainCtrl(PATH_TO_MAINCTRL, beanInfo);
+                } else if (beanInfo.getModel().equals("ListView.fxml")) {
+                    prepareFxml(attributes, beanInfo, PATH_TO_LIST_MODEL);
+                    prepareCtrl(attributes, beanInfo, beansSelectList, PATH_TO_CTRL);
+                    prepareMainView(beansSelectList, PATH_TO_MAINVIEW);
+                    prepareMainCtrl(PATH_TO_MAINCTRL, beanInfo);
+                }
             }
         }
     }
@@ -283,14 +294,17 @@ public class Worker implements WorkerItf {
 
         //Parcours les beans sélectionnés par l'utilisateur
         for (Selection beanSelect : listBeans) {
-            String fxmlFileName = beanSelect.getBean().replace(".java", "View.fxml");
-            String ids = beanSelect.getBean().replace(".java", "");
+            if (!beanSelect.getModel().isEmpty()) {
+                String fxmlFileName = beanSelect.getBean().replace(".java", "View.fxml");
+                String ids = beanSelect.getBean().replace(".java", "");
+                
+                //Ajoute les balises permettant de créer un onglet et de faire le lien avec les autres modèles FXML
+                linesToAdd += "<Tab fx:id=\"tab" + ids + "\" text=\"" + ids + "\">\n<content>\n<fx:include fx:id=\"id" + ids + "\" source=\"" + fxmlFileName + "\" /> \n </content>\n</Tab>";
 
-            //Ajoute les balises permettant de créer un onglet et de faire le lien avec les autres modèles FXML
-            linesToAdd += "<Tab fx:id=\"tab" + ids + "\" text=\"" + ids + "\">\n<content>\n<fx:include fx:id=\"id" + ids + "\" source=\"" + fxmlFileName + "\" /> \n </content>\n</Tab>";
+                //Récupère le chemin de fichier du bean
+                destinationFolder = beanSelect.getPath().replace(beanSelect.getBean(), "");
+            }
 
-            //Récupère le chemin de fichier du bean
-            destinationFolder = beanSelect.getPath().replace(beanSelect.getBean(), "");
         }
 
         //Transforme ce chemin de fichier afin de stocker le fichier dans "app.presentation"
@@ -365,6 +379,8 @@ public class Worker implements WorkerItf {
      */
     @Override
     public ArrayList<String> searchModels() {
+
+        //Transformation de la liste de File en liste de nom de fichier
         return wrk.searchModels();
     }
 }
