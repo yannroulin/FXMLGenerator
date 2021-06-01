@@ -17,6 +17,7 @@ import javafx.collections.ObservableList;
 public class Worker implements WorkerItf {
 
     private final WorkerFile wrk;
+    
     //Constante représentant le nombre max d'onglet de Beans présents dans la vue principale générée
     public static final int MAX_PANE_NUMBER = 10;
     //Constante contenant le chemin de fichier vers le Form model
@@ -24,7 +25,7 @@ public class Worker implements WorkerItf {
     //Constante contenant le chemin de fichier vers le List model
     public static final String PATH_TO_LIST_MODEL = ".\\src\\app\\models\\ListView.fxml";
     //Constante contenant le chemin de fichier vers le List model
-    public static final String PATH_TO_CTRL = ".\\src\\app\\utils\\CtrlFormModel.java";
+    public static final String PATH_TO_CTRL = ".\\src\\app\\utils\\CtrlModel.java";
     //Constante contenant le chemin de fichier vers le modèle MainView.fxml
     public static final String PATH_TO_MAINVIEW = ".\\src\\app\\utils\\MainView.fxml";
     //Constante contenant le chemin de fichier vers le modèle MaiCtrl.fxml
@@ -77,8 +78,12 @@ public class Worker implements WorkerItf {
 
         String filePath;
         int compteur = 0;
+        String modelPath = "";
+        ArrayList<File> models = new ArrayList<>();
+        models = wrk.searchModels();
 
         for (Selection beanInfo : beansSelectList) {
+            
             compteur++;
 
             //Limite le traitement de beans Selection à 10
@@ -98,22 +103,20 @@ public class Worker implements WorkerItf {
                     }
                 }
 
-                //Check les choix de modèles fait par l'utilisateur
-                if (beanInfo.getModel().equals("FormView.fxml")) {
-                    //Appel la méthode permettant de générer les FXML
-                    prepareFxml(attributes, beanInfo, PATH_TO_FORM_MODEL);
-                    //Appel la méthode permettant de générer les contrôleurs de vue
-                    prepareCtrl(attributes, beanInfo, beansSelectList, PATH_TO_CTRL);
-                    //Appel la méthode permettant de générer le MainView
-                    prepareMainView(beansSelectList, PATH_TO_MAINVIEW);
-                    //Appel la méthode permettant de générer le contrôleur de la MainView
-                    prepareMainCtrl(PATH_TO_MAINCTRL, beanInfo);
-                } else if (beanInfo.getModel().equals("ListView.fxml")) {
-                    prepareFxml(attributes, beanInfo, PATH_TO_LIST_MODEL);
-                    prepareCtrl(attributes, beanInfo, beansSelectList, PATH_TO_CTRL);
-                    prepareMainView(beansSelectList, PATH_TO_MAINVIEW);
-                    prepareMainCtrl(PATH_TO_MAINCTRL, beanInfo);
+                for (File model : models) {
+                    if (model.getName().equals(beanInfo.getModel())) {
+                        modelPath = model.getAbsolutePath();
+                    }
                 }
+
+                //Appel la méthode permettant de générer les FXML
+                prepareFxml(attributes, beanInfo, modelPath);
+                //Appel la méthode permettant de générer les contrôleurs de vue
+                prepareCtrl(attributes, beanInfo, beansSelectList, PATH_TO_CTRL);
+                //Appel la méthode permettant de générer le MainView
+                prepareMainView(beansSelectList, PATH_TO_MAINVIEW);
+                //Appel la méthode permettant de générer le contrôleur de la MainView
+                prepareMainCtrl(PATH_TO_MAINCTRL, beanInfo);
             }
         }
     }
@@ -262,7 +265,7 @@ public class Worker implements WorkerItf {
                     content += "import app.beans." + file.getBean().replace(".java", "") + ";";
                 }
 
-            } else if (line.contains("public class CtrlFormModel implements Initializable {")) {
+            } else if (line.contains("public class CtrlModel implements Initializable {")) {
                 //Donne un nom de classe correspondant au nom du fichier
                 content += "public class " + className + " implements Initializable {";
             } else {
@@ -297,7 +300,7 @@ public class Worker implements WorkerItf {
             if (!beanSelect.getModel().isEmpty()) {
                 String fxmlFileName = beanSelect.getBean().replace(".java", "View.fxml");
                 String ids = beanSelect.getBean().replace(".java", "");
-                
+
                 //Ajoute les balises permettant de créer un onglet et de faire le lien avec les autres modèles FXML
                 linesToAdd += "<Tab fx:id=\"tab" + ids + "\" text=\"" + ids + "\">\n<content>\n<fx:include fx:id=\"id" + ids + "\" source=\"" + fxmlFileName + "\" /> \n </content>\n</Tab>";
 
@@ -381,6 +384,11 @@ public class Worker implements WorkerItf {
     public ArrayList<String> searchModels() {
 
         //Transformation de la liste de File en liste de nom de fichier
-        return wrk.searchModels();
+        ArrayList<String> models = new ArrayList<>();
+
+        for (File model : wrk.searchModels()) {
+            models.add(model.getName());
+        }
+        return models;
     }
 }

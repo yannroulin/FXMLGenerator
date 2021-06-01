@@ -70,14 +70,15 @@ public class WorkerFile {
      *
      * @return ArrayList<String> contenant les modèles trouvés
      */
-    public ArrayList<String> searchModels() {
+    public ArrayList<File> searchModels() {
         File modelsDirectory = new File("." + DEFAULT_FXML_PATH);
         File[] tableModels = modelsDirectory.listFiles();
-        ArrayList<String> models = new ArrayList<>();
+        ArrayList<File> models = new ArrayList<>();
 
         for (File model : tableModels) {
-            models.add(model.getName());
+            models.add(model);
         }
+        
         return models;
     }
 

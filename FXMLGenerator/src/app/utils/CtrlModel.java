@@ -11,7 +11,7 @@ import java.util.List;
 import java.math.BigDecimal;
 
 
-public class CtrlFormModel implements Initializable {
+public class CtrlModel implements Initializable {
 
     //FXML Generator - insert here
     
