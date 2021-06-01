@@ -10,6 +10,7 @@ import app.exceptions.MyFileException;
 import app.helpers.JfxPopup;
 import app.worker.Worker;
 import app.worker.WorkerItf;
+import java.awt.Color;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
@@ -98,7 +99,6 @@ public class MainCtrl implements Initializable {
 
             ///Appel du Worker pour récupérer les modèles
             ArrayList<String> modelsList = searchModels();
-            
 
             //Permission de la sélection multiple dans le tableau
             tableChoose.getSelectionModel().setSelectionMode(
@@ -114,7 +114,7 @@ public class MainCtrl implements Initializable {
             beansColumn.setCellFactory(TextFieldTableCell.forTableColumn());
             tableChoose.getColumns().add(beansColumn);
 
-             //Création des colonnes contenant l'affichage de la ComboBox contenant les modèles
+            //Création des colonnes contenant l'affichage de la ComboBox contenant les modèles
             TableColumn<Selection, String> modelsColumn = new TableColumn<>("Models");
             modelsColumn.prefWidthProperty().bind(tableChoose.widthProperty().multiply(0.5));
             modelsColumn.setResizable(false);
@@ -149,7 +149,7 @@ public class MainCtrl implements Initializable {
 
         tableChoose.getSelectionModel().selectAll();
         //Récupère les fichiers sélectionnés dans le tableau
-        
+
         ObservableList<Selection> selected = tableChoose.getSelectionModel().getSelectedItems();
 
         try {

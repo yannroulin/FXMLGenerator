@@ -69,25 +69,26 @@ public class Worker implements WorkerItf {
      * informations reçues par le WorkerFile via la méthode permettant de lire
      * les fichiers
      *
-     * @param beansSelectList Liste contenant les Selection
+     * @param beansList Liste contenant les Selection
      * @throws MyFileException MyFileException Remonte les exceptions si
      * générées
      */
     @Override
-    public void getAttributesofBeans(ObservableList<Selection> beansSelectList) throws MyFileException {
+    public void getAttributesofBeans(ObservableList<Selection> beansList) throws MyFileException {
 
         String filePath;
         int counter = 0;
         String modelPath = "";
         boolean isEmpty = true;
         ArrayList<File> models = wrk.searchModels();
-        int size = beansSelectList.size();
+        List<Selection> selectionWithModels = getSelectionWithModels(beansList);
 
-        for (Selection beanInfo : beansSelectList) {
+        for (Selection selection : selectionWithModels) {
+
             counter++;
             //Limite le traitement de beans Selection à 10
             if (counter <= MAX_PANE_NUMBER) {
-                filePath = beanInfo.getPath();
+                filePath = selection.getPath();
                 byte[] tab;
 
                 ArrayList<String> attributes = new ArrayList<>();
@@ -103,31 +104,49 @@ public class Worker implements WorkerItf {
                 }
 
                 for (File model : models) {
-                    if (model.getName().equals(beanInfo.getModel())) {
+                    if (model.getName().equals(selection.getModel())) {
                         modelPath = model.getAbsolutePath();
+                        isEmpty = false;
 
                         //Appel la méthode permettant de générer les FXML
-                        prepareFxml(attributes, beanInfo, modelPath);
+                        prepareFxml(attributes, selection, modelPath);
                         //Appel la méthode permettant de générer les contrôleurs de vue
-                        prepareCtrl(attributes, beanInfo, beansSelectList, PATH_TO_CTRL);
+                        prepareCtrl(attributes, selection, beansList, PATH_TO_CTRL);
                         //Appel la méthode permettant de générer le MainView
-                        prepareMainView(beansSelectList, PATH_TO_MAINVIEW);
+                        prepareMainView(selectionWithModels, PATH_TO_MAINVIEW);
                         //Appel la méthode permettant de générer le contrôleur de la MainView
-                        prepareMainCtrl(PATH_TO_MAINCTRL, beanInfo);
-                        isEmpty = false;
-                    } else {
-                        if (isEmpty) {
-                            isEmpty = true;
-                        }
+                        prepareMainCtrl(PATH_TO_MAINCTRL, selection);
+
                     }
                 }
-
-                if (isEmpty) {
-                    throw new MyFileException("Worker.readFiles\n" + "Veuillez sélectionner un modèle", false);
-                }
-
+            } else {
+                throw new MyFileException("Worker.readFiles\n" + "Vous avez attribué " + selectionWithModels.size() + " modèles ! La limite est de 10.", false);
             }
         }
+        if (selectionWithModels.isEmpty()) {
+            throw new MyFileException("Worker.readFiles\n" + "Veuillez sélectionner un modèle", false);
+        }
+    }
+
+    /**
+     * Récupère les Selections avec des modèles attribués.
+     *
+     * @param selection Contenu de tout le tableau affiché dans l'interface
+     * graphique
+     * @return ObservableList<Selection> contenant les Selection avec des
+     * modèles attribués
+     */
+    private List<Selection> getSelectionWithModels(ObservableList<Selection> selection) {
+
+        List<Selection> selectionsWithModels = new ArrayList<>();
+
+        for (Selection sel : selection) {
+            if (!sel.getModel().isEmpty()) {
+                selectionsWithModels.add(sel);
+            }
+        }
+
+        return selectionsWithModels;
     }
 
     /**
@@ -237,7 +256,7 @@ public class Worker implements WorkerItf {
      * défaut
      * @throws MyFileException Remonte les exceptions si générées
      */
-    private void prepareCtrl(ArrayList<String> attributesList, Selection bean, ObservableList<Selection> beansSelectedList, String pathToCtrl) throws MyFileException {
+    private void prepareCtrl(ArrayList<String> attributesList, Selection bean, List<Selection> beansSelectedList, String pathToCtrl) throws MyFileException {
         String[] tab;
         byte[] bytes = null;
         String linesToAdd = "";
@@ -294,7 +313,7 @@ public class Worker implements WorkerItf {
      * @param path Chemin de fichier du modèle par défaut MainView
      * @throws MyFileException Remonte les exceptions si générées
      */
-    private void prepareMainView(ObservableList<Selection> listBeans, String path) throws MyFileException {
+    private void prepareMainView(List<Selection> listBeans, String path) throws MyFileException {
         String linesToAdd = "";
         String content = "";
         String destinationFolder = "";
