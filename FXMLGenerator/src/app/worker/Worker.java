@@ -17,7 +17,7 @@ import javafx.collections.ObservableList;
 public class Worker implements WorkerItf {
 
     private final WorkerFile wrk;
-    
+
     //Constante représentant le nombre max d'onglet de Beans présents dans la vue principale générée
     public static final int MAX_PANE_NUMBER = 10;
     //Constante contenant le chemin de fichier vers le Form model
@@ -77,17 +77,16 @@ public class Worker implements WorkerItf {
     public void getAttributesofBeans(ObservableList<Selection> beansSelectList) throws MyFileException {
 
         String filePath;
-        int compteur = 0;
+        int counter = 0;
         String modelPath = "";
-        ArrayList<File> models = new ArrayList<>();
-        models = wrk.searchModels();
+        boolean isEmpty = true;
+        ArrayList<File> models = wrk.searchModels();
+        int size = beansSelectList.size();
 
         for (Selection beanInfo : beansSelectList) {
-            
-            compteur++;
-
+            counter++;
             //Limite le traitement de beans Selection à 10
-            if (compteur <= MAX_PANE_NUMBER) {
+            if (counter <= MAX_PANE_NUMBER) {
                 filePath = beanInfo.getPath();
                 byte[] tab;
 
@@ -106,17 +105,27 @@ public class Worker implements WorkerItf {
                 for (File model : models) {
                     if (model.getName().equals(beanInfo.getModel())) {
                         modelPath = model.getAbsolutePath();
+
+                        //Appel la méthode permettant de générer les FXML
+                        prepareFxml(attributes, beanInfo, modelPath);
+                        //Appel la méthode permettant de générer les contrôleurs de vue
+                        prepareCtrl(attributes, beanInfo, beansSelectList, PATH_TO_CTRL);
+                        //Appel la méthode permettant de générer le MainView
+                        prepareMainView(beansSelectList, PATH_TO_MAINVIEW);
+                        //Appel la méthode permettant de générer le contrôleur de la MainView
+                        prepareMainCtrl(PATH_TO_MAINCTRL, beanInfo);
+                        isEmpty = false;
+                    } else {
+                        if (isEmpty) {
+                            isEmpty = true;
+                        }
                     }
                 }
 
-                //Appel la méthode permettant de générer les FXML
-                prepareFxml(attributes, beanInfo, modelPath);
-                //Appel la méthode permettant de générer les contrôleurs de vue
-                prepareCtrl(attributes, beanInfo, beansSelectList, PATH_TO_CTRL);
-                //Appel la méthode permettant de générer le MainView
-                prepareMainView(beansSelectList, PATH_TO_MAINVIEW);
-                //Appel la méthode permettant de générer le contrôleur de la MainView
-                prepareMainCtrl(PATH_TO_MAINCTRL, beanInfo);
+                if (isEmpty) {
+                    throw new MyFileException("Worker.readFiles\n" + "Veuillez sélectionner un modèle", false);
+                }
+
             }
         }
     }

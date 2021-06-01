@@ -43,7 +43,7 @@ public class WorkerFile {
             lines = Files.readAllLines(finalPath, Charset.forName("UTF-8"));
 
         } catch (IOException ex) {
-            throw new MyFileException("Worker.readFxml\n" + "Lecture de fichier impossible", false);
+            throw new MyFileException("Worker.readFiles\n" + "Veuillez sélectionner un modèle", false);
         }
         return lines;
     }

@@ -13,7 +13,6 @@ import app.worker.WorkerItf;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -106,13 +105,16 @@ public class MainCtrl implements Initializable {
                     SelectionMode.MULTIPLE
             );
 
+            //Création des colonnes contenant l'affichage des beans
             TableColumn<Selection, String> beansColumn = new TableColumn<>("Beans");
             beansColumn.prefWidthProperty().bind(tableChoose.widthProperty().multiply(0.5));
             beansColumn.setResizable(false);
+            beansColumn.setEditable(false);
             beansColumn.setCellValueFactory(cellData -> cellData.getValue().beanProperty());
             beansColumn.setCellFactory(TextFieldTableCell.forTableColumn());
             tableChoose.getColumns().add(beansColumn);
 
+             //Création des colonnes contenant l'affichage de la ComboBox contenant les modèles
             TableColumn<Selection, String> modelsColumn = new TableColumn<>("Models");
             modelsColumn.prefWidthProperty().bind(tableChoose.widthProperty().multiply(0.5));
             modelsColumn.setResizable(false);
@@ -121,6 +123,7 @@ public class MainCtrl implements Initializable {
             modelsColumn.setCellFactory(ComboBoxTableCell.forTableColumn(FXCollections.observableArrayList(modelsList)));
             tableChoose.getColumns().add(modelsColumn);
 
+            //Ajout des modèles récupérés 
             tableChoose.getItems().addAll(selectionInFolder);
 
             //Bouton de l'explorateur de fichier caché
@@ -145,8 +148,8 @@ public class MainCtrl implements Initializable {
     private void generateViews(ActionEvent event) {
 
         tableChoose.getSelectionModel().selectAll();
-
         //Récupère les fichiers sélectionnés dans le tableau
+        
         ObservableList<Selection> selected = tableChoose.getSelectionModel().getSelectedItems();
 
         try {
