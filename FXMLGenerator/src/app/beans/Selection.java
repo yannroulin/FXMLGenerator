@@ -9,12 +9,19 @@ public class Selection {
     private final StringProperty model = new SimpleStringProperty();
     private final StringProperty path = new SimpleStringProperty();
 
+    /**
+     * Constructeur de la classe Bean Selection. Initialise les attributs.
+     *
+     * @param bean String contenant le nom du bean
+     * @param path String contenant le modèle du bean
+     * @param model String contenant le chemin de fichier du bean
+     */
     public Selection(String bean, String path, String model) {
         setBean(bean);
         setModel(model);
         setPath(path);
     }
-
+    
     public final StringProperty beanProperty() {
         return this.bean;
     }

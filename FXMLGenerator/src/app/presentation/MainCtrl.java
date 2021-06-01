@@ -105,22 +105,34 @@ public class MainCtrl implements Initializable {
                     SelectionMode.MULTIPLE
             );
 
-            //Création des colonnes contenant l'affichage des beans
+            //Création de la colonne contenant l'affichage des beans
             TableColumn<Selection, String> beansColumn = new TableColumn<>("Beans");
+            //Définit la largeur de la colonne de la moitié du tableau
             beansColumn.prefWidthProperty().bind(tableChoose.widthProperty().multiply(0.5));
+            //Empêche l'utilisateur de redimensionner la colonne
             beansColumn.setResizable(false);
+            //Empêche l'utilisateur de modifier le contenu de la colonne
             beansColumn.setEditable(false);
+            //Indique que le nom du bean sera affiché dans cette colonne
             beansColumn.setCellValueFactory(cellData -> cellData.getValue().beanProperty());
+            //Crée un textField dans les cellules de la colonne
             beansColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+            //Ajoute les données dans le tableau
             tableChoose.getColumns().add(beansColumn);
 
-            //Création des colonnes contenant l'affichage de la ComboBox contenant les modèles
+            //Création de la colonne contenant l'affichage de la ComboBox contenant les modèles
             TableColumn<Selection, String> modelsColumn = new TableColumn<>("Models");
+            //Définit la largeur de la colonne de la moitié du tableau
             modelsColumn.prefWidthProperty().bind(tableChoose.widthProperty().multiply(0.5));
+            //Empêche l'utilisateur de redimensionner la colonne
             modelsColumn.setResizable(false);
+            //Permet à l'utilisateur de modifier le contenu de la colonne (ComboBox)
             modelsColumn.setEditable(true);
+            //Indique que le modèle du bean sera affiché dans cette colonne
             modelsColumn.setCellValueFactory(cellData -> cellData.getValue().modelProperty());
+            //Crée une comboBox dans les cellules de la colonne et y ajoute les modèles récupérés
             modelsColumn.setCellFactory(ComboBoxTableCell.forTableColumn(FXCollections.observableArrayList(modelsList)));
+            //Ajoute les données dans le tableau
             tableChoose.getColumns().add(modelsColumn);
 
             //Ajout des modèles récupérés 

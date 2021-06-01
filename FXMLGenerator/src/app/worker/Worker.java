@@ -78,9 +78,11 @@ public class Worker implements WorkerItf {
 
         String filePath;
         String modelPath = "";
+        //Demande au worker de lui donner la liste de modèles de l'application
         ArrayList<File> models = wrk.searchModels();
         List<Selection> selectionWithModels = getSelectionWithModels(beansList);
 
+        //Parcours les beans ayant des modèles attribués
         for (Selection selection : selectionWithModels) {
 
             //Limite le traitement de beans Selection à 10
@@ -88,7 +90,9 @@ public class Worker implements WorkerItf {
                 filePath = selection.getPath();
                 byte[] tab;
 
+                //Création de l'arrayList qui contiendra les lignes contenant les attributs récupérés
                 ArrayList<String> attributes = new ArrayList<>();
+                
                 //Demande au WorkerFile de lire les fichiers correspondant 
                 //aux Selection
                 List<String> lines = wrk.readFiles(filePath);
@@ -100,10 +104,11 @@ public class Worker implements WorkerItf {
                     }
                 }
 
+                //Parcours les modèles récupérés par le Worker
                 for (File model : models) {
                     if (model.getName().equals(selection.getModel())) {
+                        //Attribue une valeur au chemin de fichier du modèle
                         modelPath = model.getAbsolutePath();
-
                         //Appel la méthode permettant de générer les FXML
                         prepareFxml(attributes, selection, modelPath);
                         //Appel la méthode permettant de générer les contrôleurs de vue
@@ -112,13 +117,14 @@ public class Worker implements WorkerItf {
                         prepareMainView(selectionWithModels, PATH_TO_MAINVIEW);
                         //Appel la méthode permettant de générer le contrôleur de la MainView
                         prepareMainCtrl(PATH_TO_MAINCTRL, selection);
-
                     }
                 }
+                //Génère une exception si l'utilisateur tente de générer plus de 10 vues
             } else {
                 throw new MyFileException("Worker.readFiles\n" + "Vous avez attribué " + selectionWithModels.size() + " modèles ! La limite est de 10.", false);
             }
         }
+        //Génère une erreur si l'utilisateur n'attribue pas de modèles à ses beans
         if (selectionWithModels.isEmpty()) {
             throw new MyFileException("Worker.readFiles\n" + "Veuillez sélectionner un modèle", false);
         }
@@ -133,15 +139,18 @@ public class Worker implements WorkerItf {
      * modèles attribués
      */
     private List<Selection> getSelectionWithModels(ObservableList<Selection> selection) {
-
+        
+        //Créer la liste qui contiendra les Selection contenant des modèles
         List<Selection> selectionsWithModels = new ArrayList<>();
 
+        //Parcours tout le tableau de l'interface graphique
         for (Selection sel : selection) {
+            //Regarder si l'attribut modèle contient une valeur
             if (!sel.getModel().isEmpty()) {
+                //Ajoute les Selection contenant des modèles
                 selectionsWithModels.add(sel);
             }
         }
-
         return selectionsWithModels;
     }
 
