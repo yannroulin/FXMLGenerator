@@ -77,17 +77,14 @@ public class Worker implements WorkerItf {
     public void getAttributesofBeans(ObservableList<Selection> beansList) throws MyFileException {
 
         String filePath;
-        int counter = 0;
         String modelPath = "";
-        boolean isEmpty = true;
         ArrayList<File> models = wrk.searchModels();
         List<Selection> selectionWithModels = getSelectionWithModels(beansList);
 
         for (Selection selection : selectionWithModels) {
 
-            counter++;
             //Limite le traitement de beans Selection à 10
-            if (counter <= MAX_PANE_NUMBER) {
+            if (selectionWithModels.size() <= MAX_PANE_NUMBER) {
                 filePath = selection.getPath();
                 byte[] tab;
 
@@ -106,7 +103,6 @@ public class Worker implements WorkerItf {
                 for (File model : models) {
                     if (model.getName().equals(selection.getModel())) {
                         modelPath = model.getAbsolutePath();
-                        isEmpty = false;
 
                         //Appel la méthode permettant de générer les FXML
                         prepareFxml(attributes, selection, modelPath);

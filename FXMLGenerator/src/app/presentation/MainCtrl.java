@@ -10,7 +10,6 @@ import app.exceptions.MyFileException;
 import app.helpers.JfxPopup;
 import app.worker.Worker;
 import app.worker.WorkerItf;
-import java.awt.Color;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
@@ -99,6 +98,7 @@ public class MainCtrl implements Initializable {
 
             ///Appel du Worker pour récupérer les modèles
             ArrayList<String> modelsList = searchModels();
+            modelsList.add("");
 
             //Permission de la sélection multiple dans le tableau
             tableChoose.getSelectionModel().setSelectionMode(
