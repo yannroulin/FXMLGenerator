@@ -167,7 +167,7 @@ public class MainCtrl implements Initializable {
         try {
             //Appel du worker pour traiter les fichiers
             wrk.getAttributesofBeans(selected);
-            JfxPopup.displayInformation("Génération des vues", "Vues générées !","");
+            JfxPopup.displayInformation(lblProjectName.getScene().getWindow(), "Génération des vues", "Vues générées ", "");
 
         } catch (MyFileException ex) {
             //Affichage d'une pop-up en cas de problèmes de génération de vue
