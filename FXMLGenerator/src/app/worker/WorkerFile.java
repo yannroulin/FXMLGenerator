@@ -22,7 +22,7 @@ import java.util.List;
 public class WorkerFile {
 
     //Constante contenant le répertoire des modèles
-    public static final String DEFAULT_FXML_PATH = "\\src\\app\\models\\";
+    public static final String DEFAULT_FXML_PATH = "/src/app/models/";
 
     /**
      * Lis le fichier via le chemin reçu en paramètre
