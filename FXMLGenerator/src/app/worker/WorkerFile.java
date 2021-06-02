@@ -77,8 +77,7 @@ public class WorkerFile {
 
         for (File model : tableModels) {
             models.add(model);
-        }
-        
+        }  
         return models;
     }
 

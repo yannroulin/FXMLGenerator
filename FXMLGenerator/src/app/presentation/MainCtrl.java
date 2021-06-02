@@ -140,12 +140,12 @@ public class MainCtrl implements Initializable {
 
             //Bouton de l'explorateur de fichier caché
             btnExplorer.setVisible(false);
-            //Affichage du label du nom de l'application et du bouton de génération
+            //Affichage du label du nom de l'application et des bouton de génération et de revenir en arrière
             btnGenerateViews.setVisible(true);
             lblProjectName.setVisible(true);
             lblProjectName.setText(externApplicationDirectory.getName());
 
-        } catch (Exception ex) {
+        } catch (MyFileException ex) {
             JfxPopup.displayError("Erreur", "Pas de Beans dans le répertoire courant !", ex.getMessage());
         }
     }
@@ -167,6 +167,8 @@ public class MainCtrl implements Initializable {
         try {
             //Appel du worker pour traiter les fichiers
             wrk.getAttributesofBeans(selected);
+            JfxPopup.displayInformation("Génération des vues", "Vues générées !","");
+
         } catch (MyFileException ex) {
             //Affichage d'une pop-up en cas de problèmes de génération de vue
             JfxPopup.displayError("Erreur", "Erreur dans la génération de vos vues !", ex.getMessage());
