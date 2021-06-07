@@ -189,9 +189,12 @@ public class Worker implements WorkerItf {
                     //Ajoute une "mise en forme" de ligne
                     rowConstraints += "<RowConstraints minHeight=\"10.0\" prefHeight=\"30.0\" vgrow=\"SOMETIMES\" />";
                     //Créé le String contenant les nouvelles balises
-                    xmlFileForm += "<Label fx:id=\"" + "lbl" + attributName + "\" prefHeight=\"17.0\" prefWidth=\"122.0\" text=\"" + attributName + "\" GridPane.rowIndex=\"" + rowIndex + "\"> "
-                            + "<GridPane.margin>\n <Insets bottom=\"20.0\" left=\"10.0\" right=\"10.0\" top=\"20.0\" />\n</GridPane.margin> </Label>\n"
-                            + "<TextField fx:id=\"" + "txt" + attributName + "\" prefHeight=\"25.0\" prefWidth=\"193.0\" GridPane.columnIndex=\"1\" GridPane.rowIndex=\"" + rowIndex + "\" > \n"
+                    xmlFileForm += "<Label fx:id=\"" + "lbl" + attributName + "\" prefHeight=\"17.0\" prefWidth=\"122.0\" text=\""
+                            + attributName + "\" GridPane.rowIndex=\"" + rowIndex + "\"> "
+                            + "<GridPane.margin>\n <Insets bottom=\"20.0\" left=\"10.0\" "
+                            + "right=\"10.0\" top=\"20.0\" />\n</GridPane.margin> </Label>\n"
+                            + "<TextField fx:id=\"" + "txt" + attributName + "\" prefHeight=\"25.0\""
+                            + " prefWidth=\"193.0\" GridPane.columnIndex=\"1\" GridPane.rowIndex=\"" + rowIndex + "\" > \n"
                             + "<GridPane.margin>\n <Insets left=\"20.0\" right=\"20.0\"/>\n </GridPane.margin>\n </TextField>";
                     break;
                 case "int":
@@ -335,7 +338,8 @@ public class Worker implements WorkerItf {
                 String ids = beanSelect.getBean().replace(".java", "");
 
                 //Ajoute les balises permettant de créer un onglet et de faire le lien avec les autres modèles FXML
-                linesToAdd += "<Tab fx:id=\"tab" + ids + "\" text=\"" + ids + "\">\n<content>\n<fx:include fx:id=\"id" + ids + "\" source=\"" + fxmlFileName + "\" /> \n </content>\n</Tab>";
+                linesToAdd += "<Tab fx:id=\"tab" + ids + "\" text=\"" + ids + "\">\n<content>\n<fx:include fx:id=\"id" + 
+                        ids + "\" source=\"" + fxmlFileName + "\" /> \n </content>\n</Tab>";
 
                 //Récupère le chemin de fichier du bean
                 destinationFolder = beanSelect.getPath().replace(beanSelect.getBean(), "");
