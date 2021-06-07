@@ -58,8 +58,6 @@ public class MainCtrl implements Initializable {
     /**
      * Méthode exécutée au lancement de l'application
      *
-     * @param url
-     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {

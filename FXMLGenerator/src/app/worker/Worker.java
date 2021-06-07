@@ -43,7 +43,7 @@ public class Worker implements WorkerItf {
      * l'utilisateur dans le tableau
      *
      * @param beansDirectory Répertoire contenant les beans
-     * @return ArrayList<Selection> contenant toutes les Selection
+     * @return ArrayList contenant toutes les Selection
      * @throws MyFileException Remonte les exceptions si générées
      */
     @Override
@@ -405,7 +405,7 @@ public class Worker implements WorkerItf {
      * Méthode faisant le lien entre le MainCtrl et le WorkerFile
      *
      * @param beansDirectory Répertoire dans lequel chercher les beans
-     * @return ArrayList<File> contenant les beans
+     * @return ArrayList contenant les beans
      */
     @Override
     public ArrayList<File> searchBeans(File beansDirectory) {
@@ -415,7 +415,7 @@ public class Worker implements WorkerItf {
     /**
      * Méthode faisant le lien entre le MainCtrl et le WorkerFile
      *
-     * @return ArrayList<String> contenantles modèles
+     * @return ArrayList contenantles modèles
      */
     @Override
     public ArrayList<String> searchModels() {

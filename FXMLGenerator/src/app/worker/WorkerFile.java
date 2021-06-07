@@ -28,7 +28,7 @@ public class WorkerFile {
      * Lis le fichier via le chemin reçu en paramètre
      *
      * @param path CHemin du fichier à lire
-     * @return List<String> contenant les lignes du fichier lu
+     * @return List contenant les lignes du fichier lu
      * @throws MyFileException Remonte les exceptions si générées
      */
     public List<String> readFiles(String path) throws MyFileException {
@@ -52,7 +52,7 @@ public class WorkerFile {
      * Cherche les beans dans le répertoire reçu en paramètre
      *
      * @param beansDirectory Répertoire dans lequel chercher
-     * @return ArrayList<File> contenant les beans trouvés
+     * @return ArrayList contenant les beans trouvés
      */
     public ArrayList<File> searchBeans(File beansDirectory) {
         ArrayList<File> beansList = new ArrayList<>();
@@ -68,7 +68,7 @@ public class WorkerFile {
     /**
      * Recherche les modèles en fonction de la constante
      *
-     * @return ArrayList<String> contenant les modèles trouvés
+     * @return ArrayList contenant les modèles trouvés
      */
     public ArrayList<File> searchModels() {
         File modelsDirectory = new File("." + DEFAULT_FXML_PATH);
